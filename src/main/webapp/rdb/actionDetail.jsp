@@ -9,7 +9,7 @@ import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 			System.out.println(send_id + " <-- delete this id ");
 			request.setCharacterEncoding("utf-8");
 			
-			DBManager dbm = new DBManager();
+			DBManager dbm = new DBManager(application.getRealPath("/"));
 			dbm.connect();
 			dbm.deleteGlobalTable(send_id);
 			dbm.deleteSpecificTable(send_id);

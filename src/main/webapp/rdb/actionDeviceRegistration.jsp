@@ -30,7 +30,7 @@
 	request.setCharacterEncoding("UTF-8");
 	int item_id = Integer.parseInt(request.getParameter("item_id"));
 
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	DeviceCommon dc = dbm.getDeviceCommon(item_id);
 	

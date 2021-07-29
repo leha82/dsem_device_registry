@@ -4,7 +4,7 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 
 	dbm.connect();
 

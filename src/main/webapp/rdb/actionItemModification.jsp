@@ -8,7 +8,7 @@
 	request.setCharacterEncoding("UTF-8");
 	int id = Integer.parseInt(request.getParameter("id")); 
 	
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	DeviceCommon dc = new DeviceCommon();
 	

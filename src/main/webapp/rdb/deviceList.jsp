@@ -3,7 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 
 <%
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 
 	ArrayList<DeviceInfo> dcList = dbm.getDeviceInfo();

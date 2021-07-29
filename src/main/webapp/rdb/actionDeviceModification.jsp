@@ -10,7 +10,7 @@
 	int device_id = Integer.parseInt(request.getParameter("device_id"));
 	int item_id = Integer.parseInt(request.getParameter("item_id"));
 	
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	DeviceInfo di = new DeviceInfo();
 	di.setitem_id(Integer.parseInt(request.getParameter("item_id")));

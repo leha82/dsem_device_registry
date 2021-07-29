@@ -7,7 +7,7 @@
 <%
 	int item_id = Integer.parseInt(request.getParameter("id"));
 
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	//SpecificDBManager dbm2 = new SpecificDBManager();
 	
 	dbm.connect();

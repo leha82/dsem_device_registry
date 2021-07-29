@@ -5,7 +5,7 @@
 <%
 	int device_id = Integer.parseInt(request.getParameter("id"));
 	
-	DBManager dbm = new DBManager();
+	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	
 	DeviceInfo di = dbm.getModifyDeviceIdList(device_id);

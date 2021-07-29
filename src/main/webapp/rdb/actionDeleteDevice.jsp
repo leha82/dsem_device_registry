@@ -7,7 +7,7 @@ import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 		<%
 			int device_id = Integer.parseInt(request.getParameter("id"));
 			
-			DBManager dbm = new DBManager();
+			DBManager dbm = new DBManager(application.getRealPath("/"));
 			dbm.connect();
 			dbm.deleteDevice(device_id);
 			dbm.disconnect();

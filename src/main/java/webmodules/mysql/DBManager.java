@@ -8,18 +8,9 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 
 public class DBManager {
-//	public static String DEFAULT_IP = "220.68.27.113";
-//	public static int DEFAULT_PORT = 23306;
-//	public static String DEFAULT_DATABASE = "DeviceRegistry";
-//	public static String DEFAULT_ID = "dsem_iot";
-//	public static String DEFAULT_PW = "dsem_iot";
-//	public static String global_table = "DeviceRegistry.global_metadata";
-//	public static String specific_table = "DeviceRegistry.specific_metadata";
-//	public static String devicelist_table = "DeviceRegistry.device_list";
-//	public static String devicemeasurement_db = "Measurement";
 	public String configFilename = "config.json";
 
-	public String dbDriverClass = "com.mysql.jdbc.Driver";
+	public String dbDriverClass = "com.mysql.cj.jdbc.Driver";
 	public String jdbcDriver; 
 
 	public String dbIP;
@@ -33,24 +24,11 @@ public class DBManager {
 	public String tblDevice;
 	
 	public Connection conn;
-//	public String dbUser;
-//	public String dbPwd;
-//	public String tableGlobal;
-//	public String tableSpecific;
-//	public String tableDevice;
 	
-	public DBManager() {
-		String path = System.getProperty("user.dir");
-	    System.out.println("Working Directory = " + path);
-	    
-	    File dir = new File(path);
-	    File files[] = dir.listFiles();
-
-	    for (int i = 0; i < files.length; i++) {
-	        System.out.println("file: " + files[i]);
-	    }
-		
-		setConfig(configFilename);
+	public DBManager(String configPath) {
+		String filename = configPath + configFilename;
+//		System.out.println(filename);
+		setConfig(filename);
 		
 		conn = null;
 		jdbcDriver = "jdbc:mysql://" + dbIP + ":" + dbPort + "/" 
@@ -59,15 +37,11 @@ public class DBManager {
 	}
 
 	public void setConfig(String configfile) {
-		String path = System.getProperty("user.dir");
-	    String filename = "config.json";
-//	    String filename = path + "\\" + "config.json";
-
 	    JSONParser parser = new JSONParser();
 		JSONObject jsonObject; 
 	    
 		try {
-			jsonObject = (JSONObject) parser.parse(new FileReader(filename));
+			jsonObject = (JSONObject) parser.parse(new FileReader(configfile));
 			
 			dbIP = (String) jsonObject.get("DB_IP");
 			dbPort = Integer.parseInt((String)jsonObject.get("DB_PORT"));
@@ -79,15 +53,6 @@ public class DBManager {
 			tblSpecific = (String) jsonObject.get("DB_SPECIFIC_TABLE");
 			tblDevice = (String) jsonObject.get("DB_DEVICE_TABLE");
 			
-			System.out.println(dbIP);
-			System.out.println(dbPort);
-			System.out.println(dbID);
-			System.out.println(dbPW);
-			System.out.println(dbnameRegistry);
-			System.out.println(dbnameMeasurement);
-			System.out.println(tblGlobal);
-			System.out.println(tblSpecific);
-			System.out.println(tblDevice);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
@@ -101,6 +66,7 @@ public class DBManager {
 			conn = DriverManager.getConnection(jdbcDriver, dbID, dbPW);
 			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -112,6 +78,7 @@ public class DBManager {
 			conn.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -119,7 +86,6 @@ public class DBManager {
 	
 	public void insertGlobalList(DeviceCommon dc) {
 		try {
-//			String sql = "insert into deviceregistry.global_metadata (item_id, model_name, registration_time,"
 			String sql = "INSERT INTO " + tblGlobal 
 						+ " (item_id, model_name, registration_time, device_type, manufacturer, category)"
 						+ " VALUES (?,?,?,?,?,?)";
