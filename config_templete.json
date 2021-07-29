@@ -1,0 +1,11 @@
+{
+	"DB_IP":"input database ip address",
+	"DB_PORT":"input database port",
+	"DB_ID":"input database user id",
+	"DB_PW":"input database password",
+	"DB_REGISTRY_DB":"DeviceRegistry",
+	"DB_MEASUREMENT_DB":"Measurement",
+	"DB_GLOBAL_TABLE":"DeviceRegistry.global_metadata",
+	"DB_SPECIFIC_TABLE":"DeviceRegistry.specific_metadata",
+	"DB_DEVICE_TABLE":"DeviceRegistry.device_list"
+}

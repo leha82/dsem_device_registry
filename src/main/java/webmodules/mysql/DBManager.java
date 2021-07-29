@@ -3,38 +3,102 @@ package webmodules.mysql;
 import java.sql.*;
 import java.util.*;
 import structures.mysql.*;
+import java.io.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 public class DBManager {
-	public static String DB_DRIVERCLASS = "com.mysql.jdbc.Driver";
-//	public static String DEFAULT_IP = "203.234.62.115";
-	public static String DEFAULT_IP = "220.68.27.113";
-	public static int DEFAULT_PORT = 23306;
-	public static String DEFAULT_DATABASE = "DeviceRegistry";
-	public static String DEFAULT_ID = "dsem_iot";
-	public static String DEFAULT_PW = "dsem_iot";
+//	public static String DEFAULT_IP = "220.68.27.113";
+//	public static int DEFAULT_PORT = 23306;
+//	public static String DEFAULT_DATABASE = "DeviceRegistry";
+//	public static String DEFAULT_ID = "dsem_iot";
+//	public static String DEFAULT_PW = "dsem_iot";
+//	public static String global_table = "DeviceRegistry.global_metadata";
+//	public static String specific_table = "DeviceRegistry.specific_metadata";
+//	public static String devicelist_table = "DeviceRegistry.device_list";
+//	public static String devicemeasurement_db = "Measurement";
+	public String configFilename = "config.json";
 
-	public Connection conn;
+	public String dbDriverClass = "com.mysql.jdbc.Driver";
 	public String jdbcDriver; 
-	public String dbUser;
-	public String dbPwd;
-	public String global_table = "DeviceRegistry.global_metadata";
-	public String specific_table = "DeviceRegistry.specific_metadata";
-	public String devicelist_table = "DeviceRegistry.device_list";
-	public String devicemeasurement_db = "Measurement";
+
+	public String dbIP;
+	public int dbPort;
+	public String dbID;
+	public String dbPW;
+	public String dbnameRegistry;
+	public String dbnameMeasurement;
+	public String tblGlobal;
+	public String tblSpecific;
+	public String tblDevice;
+	
+	public Connection conn;
+//	public String dbUser;
+//	public String dbPwd;
+//	public String tableGlobal;
+//	public String tableSpecific;
+//	public String tableDevice;
 	
 	public DBManager() {
-		this.conn = null;
-		this.dbUser = DBManager.DEFAULT_ID;
-		this.dbPwd = DBManager.DEFAULT_PW;
-		this.jdbcDriver = "jdbc:mysql://" + DBManager.DEFAULT_IP + ":" + DEFAULT_PORT + "/" 
-				+ DBManager.DEFAULT_DATABASE + "?useUnicode=true&characterEncoding=utf8";
+		String path = System.getProperty("user.dir");
+	    System.out.println("Working Directory = " + path);
+	    
+	    File dir = new File(path);
+	    File files[] = dir.listFiles();
+
+	    for (int i = 0; i < files.length; i++) {
+	        System.out.println("file: " + files[i]);
+	    }
+		
+		setConfig(configFilename);
+		
+		conn = null;
+		jdbcDriver = "jdbc:mysql://" + dbIP + ":" + dbPort + "/" 
+				+ dbnameRegistry + "?useUnicode=true&characterEncoding=utf8";
 		
 	}
 
+	public void setConfig(String configfile) {
+		String path = System.getProperty("user.dir");
+	    String filename = "config.json";
+//	    String filename = path + "\\" + "config.json";
+
+	    JSONParser parser = new JSONParser();
+		JSONObject jsonObject; 
+	    
+		try {
+			jsonObject = (JSONObject) parser.parse(new FileReader(filename));
+			
+			dbIP = (String) jsonObject.get("DB_IP");
+			dbPort = Integer.parseInt((String)jsonObject.get("DB_PORT"));
+			dbID = (String) jsonObject.get("DB_ID");
+			dbPW = (String) jsonObject.get("DB_PW");
+			dbnameRegistry = (String) jsonObject.get("DB_REGISTRY_DB");
+			dbnameMeasurement = (String) jsonObject.get("DB_MEASUREMENT_DB");
+			tblGlobal = (String) jsonObject.get("DB_GLOBAL_TABLE");
+			tblSpecific = (String) jsonObject.get("DB_SPECIFIC_TABLE");
+			tblDevice = (String) jsonObject.get("DB_DEVICE_TABLE");
+			
+			System.out.println(dbIP);
+			System.out.println(dbPort);
+			System.out.println(dbID);
+			System.out.println(dbPW);
+			System.out.println(dbnameRegistry);
+			System.out.println(dbnameMeasurement);
+			System.out.println(tblGlobal);
+			System.out.println(tblSpecific);
+			System.out.println(tblDevice);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public boolean connect() {
 		try {
-			Class.forName(DBManager.DB_DRIVERCLASS);
-			conn = DriverManager.getConnection(this.jdbcDriver, this.dbUser, this.dbPwd);
+			Class.forName(dbDriverClass);
+			conn = DriverManager.getConnection(jdbcDriver, dbID, dbPW);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,9 +120,9 @@ public class DBManager {
 	public void insertGlobalList(DeviceCommon dc) {
 		try {
 //			String sql = "insert into deviceregistry.global_metadata (item_id, model_name, registration_time,"
-			String sql = "insert into global_metadata (item_id, model_name, registration_time,"
-						+ " device_type, manufacturer, category)"
-						+ " values (?,?,?,?,?,?)";
+			String sql = "INSERT INTO " + tblGlobal 
+						+ " (item_id, model_name, registration_time, device_type, manufacturer, category)"
+						+ " VALUES (?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -82,8 +146,8 @@ public class DBManager {
 		ArrayList<DeviceCommon> devList = new ArrayList<DeviceCommon>(); 
 		try {
 			ResultSet rs = null;
-			String sql = "select item_id, model_name, registration_time, device_type, manufacturer, category"
-						+ " from " + global_table;
+			String sql = "SELECT item_id, model_name, registration_time, device_type, manufacturer, category"
+						+ " FROM " + tblGlobal;
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
@@ -111,8 +175,9 @@ public class DBManager {
 	
 	public void deleteGlobalTable(int item_id) {
 		try {
+			String sql = "DELETE FROM " + tblGlobal + " WHERE item_id=?";
 			PreparedStatement pstmt = null;
-			pstmt = conn.prepareStatement("DELETE FROM deviceregistry.global_metadata WHERE item_id=?");
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, item_id);
 			pstmt.executeUpdate();
 		} 
@@ -123,8 +188,9 @@ public class DBManager {
 	
 	public void deleteSpecificTable(int item_id) {
 		try {
+			String sql = "DELETE FROM " + tblSpecific + " WHERE item_id=?";
 			PreparedStatement pstmt = null;
-			pstmt = conn.prepareStatement("DELETE FROM deviceregistry.specific_metadata WHERE item_id=?");
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, item_id);
 			pstmt.executeUpdate();
 		} 
@@ -137,9 +203,9 @@ public class DBManager {
 		ArrayList<DeviceInfo> devList = new ArrayList<DeviceInfo>(); 
 		try {
 			ResultSet rs = null;
-			String sql = "select device_id, item_id, system_id, device_name, table_name, deployment_time,"
+			String sql = "SELECT device_id, item_id, system_id, device_name, table_name, deployment_time,"
 						+ " deployment_location, latitude, longitude "
-						+ " from " + devicelist_table;
+						+ " FROM " + tblDevice;
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -171,9 +237,9 @@ public class DBManager {
 		DeviceCommon dc = new DeviceCommon(); 
 		try {
 			ResultSet rs = null;
-			String sql = "select item_id, model_name, registration_time, device_type, manufacturer, category"
-						+ " from " + global_table
-						+ " where item_id = '" + item_id + "';";
+			String sql = "SELECT item_id, model_name, registration_time, device_type, manufacturer, category"
+						+ " FROM " + tblGlobal
+						+ " WHERE item_id = '" + item_id + "';";
 			
 			System.out.println(sql);
 			
@@ -201,10 +267,10 @@ public class DBManager {
 	public DeviceInfo getDeviceInfo(int device_id){
 		DeviceInfo di = new DeviceInfo(); 
 		try {
-			String sql = "select device_id, item_id, system_id, device_name, table_name, "
-					+ "deployment_time, deployment_location, latitude, longitude "
-					+ "from " + devicelist_table + " " 
-					+ "where device_id = " + device_id;
+			String sql = "SELECT device_id, item_id, system_id, device_name, table_name, "
+					+ "deployment_time, deployment_location, latitude, longitude"
+					+ " FROM " + tblDevice 
+					+ " WHERE device_id = " + device_id;
 
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -221,9 +287,9 @@ public class DBManager {
 				di.setlongitude(rs.getString(9));
 			}
 			
-			sql = "select model_name "
-					+ "from " + global_table + " " 
-					+ "where item_id = " + di.getitem_id();
+			sql = "SELECT model_name"
+					+ " FROM " + tblGlobal  
+					+ " WHERE item_id = " + di.getitem_id();
 
 			rs = stmt.executeQuery(sql);
 
@@ -245,10 +311,10 @@ public class DBManager {
 		DeviceInfo dl = new DeviceInfo(); 
 		try {
 			ResultSet rs = null;
-			String sql = "select device_id, item_id, system_id, device_name, table_name,"
+			String sql = "SELECT device_id, item_id, system_id, device_name, table_name,"
 						+ " deployment_time, deployment_location, latitude, longitude"
-						+ " from " + devicelist_table 
-						+ " where device_id = '" + device_id + "';";
+						+ " FROM " + tblDevice 
+						+ " WHERE device_id = '" + device_id + "';";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -274,7 +340,11 @@ public class DBManager {
 	}
 	public void insertSpecificList(int id, ArrayList<String> keyList, ArrayList<String> valueList) {
 		try {
-			String sql = "insert into specific_metadata (item_id, metadata_key, metadata_value) values (?,?,?) ON DUPLICATE KEY UPDATE item_id=?, metadata_key=?, metadata_value=?";
+			String sql = "INSERT INTO " + tblSpecific 
+						+ " (item_id, metadata_key, metadata_value)"
+						+ " VALUES (?,?,?)"
+						+ " ON DUPLICATE KEY UPDATE item_id=?, metadata_key=?, metadata_value=?";
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 		     for(int i = 0; i < keyList.size();i++){
 		    	 pstmt.setInt(1, id);
@@ -294,9 +364,9 @@ public class DBManager {
 		DeviceSpecific ds = new DeviceSpecific(); 
 		try {
 			ResultSet rs = null;
-			String sql = "select item_id, metadata_key, metadata_value"
-						+ " from " + specific_table
-						+ " where item_id = '" + item_id + "';";
+			String sql = "SELECT item_id, metadata_key, metadata_value"
+						+ " FROM " + tblSpecific
+						+ " WHERE item_id = '" + item_id + "';";
 			
 			System.out.println(sql);
 			
@@ -321,8 +391,9 @@ public class DBManager {
 	public int getLastDeviceId() {
 		int device_id = 0;
 		try {
-			String sql = "select device_id " + " from " + devicelist_table 
-						+ " order by device_id desc limit 1;";
+			String sql = "SELECT device_id " 
+						+ " FROM " + tblDevice 
+						+ " ORDER BY device_id DESC LIMIT 1;";
 			System.out.println(sql);
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery();
@@ -341,7 +412,9 @@ public class DBManager {
 	
 	public void updateGlobalList(DeviceCommon dc) {
 		try {
-			String sql = "update global_metadata set model_name=?, device_type=?, manufacturer=?, category=? where item_id=?";
+			String sql = "UPDATE " + tblGlobal 
+						+ " SET model_name=?, device_type=?, manufacturer=?, category=?"
+						+ " WHERE item_id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, dc.getmodel_name());
@@ -357,7 +430,10 @@ public class DBManager {
 	
 	public void updateDeviceList(DeviceInfo di) {
 		try {
-			String sql = "update deviceregistry.device_list set item_id=?, system_id=?, device_name=?, deployment_time=?, deployment_location=?, latitude=?, longitude=? where device_id=?";
+			String sql = "UPDATE " + tblDevice 
+						+ " SET item_id=?, system_id=?, device_name=?, deployment_time=?, "
+						+ "deployment_location=?, latitude=?, longitude=?"
+						+ " WHERE device_id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setInt(1, di.getitem_id());
@@ -376,7 +452,9 @@ public class DBManager {
 	
 	public void updateDeviceTableName(int device_id, String table_name) {
 		try {
-			String sql = "update deviceregistry.device_list set table_name=? where device_id=?";
+			String sql = "UPDATE " + tblDevice 
+						+ " SET table_name=?"
+						+ " WHERE device_id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, table_name);
@@ -389,9 +467,10 @@ public class DBManager {
 	
 	public void insertDeviceList(DeviceInfo di) {
 		try {
-			String sql = "insert into deviceregistry.device_list (item_id, system_id, device_name,"
-						+ " table_name, deployment_time, deployment_location, latitude, longitude)"
-						+ " values (?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO " + tblDevice 
+						+ " (item_id, system_id, device_name, table_name, deployment_time,"
+						+ " deployment_location, latitude, longitude)"
+						+ " VALUES (?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -415,8 +494,8 @@ public class DBManager {
 
 	public void deleteDevice(int device_id) {
 		try {
-			String sql = "delete from " + devicelist_table 
-					+ " where device_id=?";
+			String sql = "DELETE FROM " + tblDevice 
+						+ " WHERE device_id=?";
 			System.out.println(sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -432,10 +511,10 @@ public class DBManager {
 		ArrayList<String> keyList = new ArrayList<String>();
 
 		try {
-			// specific_metadata 컬럼 받아오기
-			String select_sql = "select * from " + specific_table
-						+ " where item_id = " + item_id
-						+ " and (metadata_key like 'sensor-%')";
+			// get sensor spec from specific_metadata
+			String select_sql = "SELECT * FROM " + tblSpecific
+						+ " WHERE item_id = " + item_id
+						+ " AND (metadata_key LIKE 'sensor-%')";
 
 			PreparedStatement pstmt = conn.prepareStatement(select_sql);
 			ResultSet rs = pstmt.executeQuery();
@@ -445,9 +524,9 @@ public class DBManager {
 				keyList.add(key);
 			}
 		
-			String select_sql2 = "select * from " + specific_table
-					+ " where item_id = " + item_id
-					+ " and (metadata_key like 'actuator-%')";
+			String select_sql2 = "SELECT * FROM " + tblSpecific
+					+ " WHERE item_id = " + item_id
+					+ " AND (metadata_key LIKE 'actuator-%')";
 
 			PreparedStatement pstmt2 = conn.prepareStatement(select_sql2);
 			ResultSet rs2 = pstmt2.executeQuery();
@@ -457,16 +536,16 @@ public class DBManager {
 			keyList.add(key);
 			}
 
-			// 테이블 생성
-			String createSql = "create table " + devicemeasurement_db + "." + table_Name 
-						+ " (" + "id int auto_increment, timestamp datetime," 
-						+ " primary key(id))";
+			// create measurement table
+			String createSql = "CREATE TABLE " + dbnameMeasurement + "." + table_Name 
+						+ " (" + "id INT AUTO_INCREMENT, timestamp DATETIME," 
+						+ " PRIMARY KEY(id))";
 			Statement stmt = this.conn.createStatement();
 			stmt.execute(createSql);
 
 			for (int j = 0; j < keyList.size(); j++) {
-				String alterSql = "alter table " + devicemeasurement_db + "." + table_Name 
-							+ " add " + keyList.get(j) + " varchar(200)";
+				String alterSql = "ALTER TABLE " + dbnameMeasurement + "." + table_Name 
+							+ " ADD " + keyList.get(j) + " varchar(200)";
 				stmt.execute(alterSql);
 			}
 		}
@@ -476,10 +555,10 @@ public class DBManager {
 		}
 	}
 	
-	// 테이블 삭제
+	// delete measurement table
 	public void deleteMeasurementTable(String table_name) {
 		try {
-			String deleteSql = "drop table devicemeasurement." + table_name;
+			String deleteSql = "DROP TABLE " + dbnameMeasurement + "." + table_name;
 
 			Statement stmt = this.conn.createStatement();
 			stmt.executeUpdate(deleteSql);
