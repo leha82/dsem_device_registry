@@ -8,16 +8,13 @@
 	int item_id = Integer.parseInt(request.getParameter("id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
-	//SpecificDBManager dbm2 = new SpecificDBManager();
 	
 	dbm.connect();
-	//dbm2.connect();
 	
 	DeviceCommon dc = dbm.getDeviceCommon(item_id);
 	DeviceSpecific ds = dbm.getDeviceSpecific(item_id);
 	
 	dbm.disconnect();
-//	dbm2.disconnect();
 	
 	for(int i=0; i<ds.size(); i++) {
 		
@@ -25,72 +22,68 @@
 		System.out.println("value #" + (i+1) + " : " + ds.getValue(i));
 	}
 	
-	
-	//String id_json = (String)request.getParameter("ID");
-	//String key0 = (String)request.getParameter("key0");
-	//String value0 = (String)request.getParameter("value0");
 %>
     
 <html>
-	<head>
-    
-		<!-- jQuery  -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
-				type="text/javascript"></script>
-    	
-		<style>
-			h1 {
-				border-collapse: collapse;
-			}
-			table {
-				width: 600px;
-				border: 1px solid #444444;
-				border-collapse: collapse;
-				margin: 5px;
-			}
-			th, td {
-				width: 50%;
-				border: 1px solid #444444;
-				padding: 5px;
-			}
-			#append_row{
-			float : left;
-			margin : 5px;
-			}
-			.inputText {
-				width: 95%;
-				text-align : center;
-			}
-			.MainContent {
-				position: absolute; left: 50%; 
-				width: 1024px; margin-left: -512px;			
-				text-align:center;		
-			}
-			.MenuBar {
-				width:100%; height:100%; background:orange; 
-				float:center; padding:15px;
-				font-size:20px; color:black; font-weight:bold; text-decoration:none;
-				text-align:center;	
-			}
-			.DeviceInfo {
-				position: absolute; left: 50%; 
-				width:600px; margin-left: -300px;		 
-				height:100%; 
-				text-align:center;
-			}	
-						
-		</style>
-		
-		<script type="text/javascript">   
-        	function goBack(){
-        		window.history.back();
-        	}
-		</script>
-    
-		<title>Device metadata modification page</title>
-	</head>
+<head>
+   
+	<!-- jQuery  -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
+			type="text/javascript"></script>
+   	
+	<style>
+		h1 {
+			border-collapse: collapse;
+		}
+		table {
+			width: 600px;
+			border: 1px solid #444444;
+			border-collapse: collapse;
+			margin: 5px;
+		}
+		th, td {
+			width: 50%;
+			border: 1px solid #444444;
+			padding: 5px;
+		}
+		#append_row{
+		float : left;
+		margin : 5px;
+		}
+		.inputText {
+			width: 95%;
+			text-align : center;
+		}
+		.MainContent {
+			position: absolute; left: 50%; 
+			width: 1024px; margin-left: -512px;			
+			text-align:center;		
+		}
+		.MenuBar {
+			width:100%; height:100%; background:orange; 
+			float:center; padding:15px;
+			font-size:20px; color:black; font-weight:bold; text-decoration:none;
+			text-align:center;	
+		}
+		.DeviceInfo {
+			position: absolute; left: 50%; 
+			width:600px; margin-left: -300px;		 
+			height:100%; 
+			text-align:center;
+		}	
+					
+	</style>
+	
+	<script type="text/javascript">   
+       	function goBack(){
+       		window.history.back();
+       	}
+	</script>
+   
+	<title>Device metadata modification page</title>
+</head>
 
-	<body>
+<body>
 	<div class="MainContent">
 	<form name='myform6' action="actionItemModification.jsp" method="POST">
 		<div class="MenuBar">
@@ -132,7 +125,7 @@
 							value="<%= dc.getCategory() %>"></td>
 				</tr>
 			</table>
-
+	
 			<h2 style = "text-align: left;">Specific Metadata</h2>
 			<input type="button" id="append_row" name="append_row" value="add_row">
 			<table>
@@ -159,10 +152,10 @@
 			    </tbody>
 			</table>
 		</div>
-
+	
 		<input type='hidden' name='jsonData2'>
 		<input type='hidden' name='Dsize'>
-
+	
 		<script type="text/javascript">
 			
 			var dsSize = <%=ds.size()%>
@@ -187,12 +180,12 @@
 		       
 		    });
 		</script>
-
+	
 		<script type="text/javascript">
 			function deleteRow(obj){
 				 $(obj).parent().parent().remove();
 			}
-
+	
 		</script>
 		
 		<script>
@@ -200,8 +193,8 @@
 				myform6.Dsize.value = ds_index;
 			});
 		</script>
-
+	
 	</form>
 	</div>
-	</body>
+</body>
 </html>

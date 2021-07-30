@@ -8,14 +8,9 @@
 	int device_id = Integer.parseInt(request.getParameter("id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
-	//SpecificDBManager dbm2 = new SpecificDBManager();
-	
 	dbm.connect();
-
 	DeviceInfo di = dbm.getDeviceInfo(device_id);
-	
 	//DeviceSpecific ds = dbm.getDeviceSpecific(device_id);
-	
 	dbm.disconnect();
 %>
     

@@ -108,7 +108,7 @@
 					<td><%= dl.getlatitude()%></td>
 					<td><%= dl.getlongitude() %></td>
 					<td>
-						<button type="button" onclick="location.href='deviceModification.jsp?id=<%=dl.getitem_id()%>'" target="_blank" width="600px">modify</button>
+						<button type="button" onclick="location.href='deviceModification.jsp?id=<%=dl.getdevice_id()%>'" target="_blank" width="600px">modify</button>
 					</td>
 					<td>
 						<button type="button" onclick="location.href='actionDeleteDevice.jsp?id=<%=dl.getdevice_id()%>&item_id=<%=dl.getitem_id() %>'" target="_blank" width="600px">delete</button>

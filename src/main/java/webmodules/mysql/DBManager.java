@@ -237,7 +237,6 @@ public class DBManager {
 					+ "deployment_time, deployment_location, latitude, longitude"
 					+ " FROM " + tblDevice 
 					+ " WHERE device_id = " + device_id;
-
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -252,15 +251,13 @@ public class DBManager {
 				di.setlatitude(rs.getString(8));
 				di.setlongitude(rs.getString(9));
 			}
-			
 			sql = "SELECT model_name"
 					+ " FROM " + tblGlobal  
 					+ " WHERE item_id = " + di.getitem_id();
-
 			rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				di.setItem_name(rs.getNString(1));
+				di.setItem_name(rs.getString(1));
 			}
 			
 			System.out.println(di.toString());

@@ -5,7 +5,13 @@ First, DR itemizes devices considering that multiple devices of the same specifi
 
 The DR can register the device after registering the item.If an item has the same meaning as a kind of IoT device product information, the device can be referred to as things that the user purchases and installs.
 
-## Configuration Setting
-1. rename config_templete.json to config.json
-2. fill the contents of json file
-3. save config file
+## Configuration File Setting
+1. open folder in src/main/webapp
+2. copy and rename config_templete.json to config.json
+3. fill the contents of json file
+4. save config file
+
+## Eclipse Project Setting
+1. Clone this repository and make dynamic web project in eclipse.
+2. Make sure that all libraries in lib folder are added in build path configuration.
+3. Due to perform smoothly the tomcat, copy mysql-connector-java-8.0.22.jar file into Tomcat lib folder in tomcat's source folder.
