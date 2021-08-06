@@ -5,7 +5,7 @@
 <%//actionModification.jsp %>
 
 <%
-	request.setCharacterEncoding("UTF-8");
+request.setCharacterEncoding("UTF-8");
 	int id = Integer.parseInt(request.getParameter("id")); 
 	
 	DBManager dbm = new DBManager(application.getRealPath("/"));
@@ -40,18 +40,18 @@
 		System.out.print(i + " - key : " + mdkey + " |  value : " + mdvalue);
 		
 		if ( !(mdkey=="" || mdkey==null 
-			|| mdvalue == "" || mdvalue==null)) {
-			if (!(mdkey.equals("null") && mdvalue.equals("null"))) {
-				new_keylist.add(mdkey);
-				new_valuelist.add(mdvalue);
-				
-				System.out.print("  added");	
-			}
+	|| mdvalue == "" || mdvalue==null)) {
+	if (!(mdkey.equals("null") && mdvalue.equals("null"))) {
+		new_keylist.add(mdkey);
+		new_valuelist.add(mdvalue);
+		
+		System.out.print("  added");	
+	}
 		}
 		System.out.println();
 	}
     
-     dbm.deleteSpecificTable(id);
+     dbm.deleteSpecificItem(id);
      dbm.insertSpecificList(id, new_keylist, new_valuelist);
      dbm.disconnect();
     

@@ -59,7 +59,6 @@ public class DBManager {
 		}
 	}
 	
-	
 	public boolean connect() {
 		try {
 			Class.forName(dbDriverClass);
@@ -139,7 +138,7 @@ public class DBManager {
 		return devList;
 	}
 	
-	public void deleteGlobalTable(int item_id) {
+	public void deleteGlobalItem(int item_id) {
 		try {
 			String sql = "DELETE FROM " + tblGlobal + " WHERE item_id=?";
 			PreparedStatement pstmt = null;
@@ -152,7 +151,7 @@ public class DBManager {
 		}
 	}
 	
-	public void deleteSpecificTable(int item_id) {
+	public void deleteSpecificItem(int item_id) {
 		try {
 			String sql = "DELETE FROM " + tblSpecific + " WHERE item_id=?";
 			PreparedStatement pstmt = null;
