@@ -2,31 +2,24 @@ package structures.mysql;
 
 import java.util.*;
 
-public class DeviceSpecific {
-	public int id;
-	public ArrayList<String> groupList;
-	public ArrayList<String> keyList;
-	public ArrayList<String> valueList;
-
+public class ItemSpecific {
+	private int id;
+	private ArrayList<String> groupList;
+	private ArrayList<String> keyList;
+	private ArrayList<String> valueList;
 	
-	public DeviceSpecific() {
-		this.id = 0;
-		this.groupList = new ArrayList<String>();
-		this.keyList = new ArrayList<String>();
-		this.valueList = new ArrayList<String>();
+	public ItemSpecific() {
+		this(0, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
 
-	public DeviceSpecific(int device_id) {
-		this.id = device_id;
-		this.groupList = new ArrayList<String>();
-		this.keyList = new ArrayList<String>();
-		this.valueList = new ArrayList<String>();
+	public ItemSpecific(int device_id) {
+		this(device_id, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
 	}
-
-	public DeviceSpecific(int device_id, ArrayList<String> group, ArrayList<String> key, ArrayList<String> value) {
+	
+	public ItemSpecific(int device_id, ArrayList<String> group, ArrayList<String> metadata, ArrayList<String> value) {
 		this.id = device_id;
 		this.groupList = group;
-		this.keyList = key;
+		this.keyList = metadata;
 		this.valueList = value;
 	}
 	

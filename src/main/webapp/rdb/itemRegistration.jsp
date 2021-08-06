@@ -4,104 +4,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-  h1 {
-  	  border-collapse: collapse;
-  }
-  table {
-    width:600px;
-	border: 1px solid #444444;
-	border-collapse: collapse;
-	margin: 5px;
-  }
-  th, td {
-	width: 50%;
-	border: 1px solid #444444;
-	padding: 5px;	
-  }
-  .MainContent{
-  	position: absolute; left: 50%;
-  	width: 1024px; margin-left: -512px;
-  	text-align:center;
-  }
-  .MenuBar{
-  	width:100%; height:100%; background:orange;
-  	float:center; padding:15px;
-  	font-size:20px; color:black; font-weight:bold; text-decoration:none;
-  	text-align:center;
-  }
-  .InputText{
-  	width: 95%;
-  	text-align : center;
-  }
-  
-</style>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
-	type="text/javascript"></script>
-<script type="text/javascript">
-	function check(no) {
-		if (myform.model1.value == "" || myform.dv1.value == ""
-				|| myform.manufac1.value == "" ) {
-			alert("Input values");
-			myform.model1.focus();
-			myform.dv1.focus();
-			myform.manufac1.focus();
-			return false;
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" sype="text/css" href = "../css/main.css">
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
+		type="text/javascript"></script>
+	<script type="text/javascript">
+		function check() {
+			if (myform.model_name.value == "" || myform.device_type.value == ""
+					|| myform.manufacturer.value == "" ) {
+				alert("Input values");
+				myform.model_name.focus();
+				myform.device_type.focus();
+				myform.manufacturer.focus();
+				return false;
+			}
+//			document.myform.action = "actionItemRegistration.jsp";
+			document.myform.submit();
 		}
-		if (no == 1) {
-			document.myform.action = "actionItemRegistration.jsp";
-		} else if (no == 2) {
-			document.myform.action = "test2.jsp";
-		} else {
-			return;
+	</script>
+	<script type="text/javascript">   
+		function goBack(){
+			window.history.back();
 		}
-		document.myform.submit();
-	}
-</script>
- <script type="text/javascript">   
-        function goBack(){
-        window.history.back();
-        	}
-    </script>
+	</script>
     <title>Device Item Register</title>
 </head>
 
 <body>
-<div class="MainContent">
-	<form name='myform' action="DbSelect.jsp" method="post">
-	<div class="MenuBar">
-			<h1>Device Item Register</h1>
-			<button  type="button" class="back" onclick="goBack();">Back</button></p>
-	</div>
-	<br><br>
-		<table id="example" border="3px" style="margin-left: auto; margin-right: auto;">
-			<tr>
-				<th>Model name</th>
-				<td><input type="text" class="InputText" name="model1" placeholder="input" style="width:300px;height:30px;" /></td>
-			</tr>
-			<tr>
-				<th>Device type</th>
-				<td><input type="text" class="InputText" name="dv1" placeholder="input" style="width:300px;height:30px;" /></td>
-			</tr>
-			<tr>
-				<th>Manufacturer</th>
-				<td><input type="text" class="InputText" name="manufac1" placeholder="input" style="width:300px;height:30px;" />
-			</tr>
-			
-			<tr>
-				<th>Category</th>
-				<td><input type="text" class="InputText" name="cate1" placeholder="input" style="width:300px;height:30px;" />
-			</tr>
-			
-			<tr>
-				<th>Register</th>
-				<td><button type="button" onclick="check(1)"style="width:304px;height:30px;">Register</button></td>
-			</tr>
-				</table>
-			</form>
+	<div class="MainContent">
+	<form name='myform' action="actionItemRegistration.jsp" method="post">
+		<div class="MenuBar" id="item_top">
+			<h1>Item Registration</h1>
+			<jsp:include page="menu.jsp" flush="false" />
 		</div>
-	</body>
+		<div class="SubMenuBar">
+			<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>
+		</div>
+		<div class="DeviceInfo">
+			<h2>Register New Device Item</h2>
+			<table>
+				<thead>
+					<th style="width: 30%;">Metadata</th>
+					<th style="width: 70%;">Value</th>
+				</thead>
+				<tr>
+					<th>Model name</th>
+					<td><input type="text" class="inputText" name="model_name" placeholder="input" /></td>
+				</tr>
+				<tr>
+					<th>Device type</th>
+					<td><input type="text" class="inputText" name="device_type" placeholder="input" /></td>
+				</tr>
+				<tr>
+					<th>Manufacturer</th>
+					<td><input type="text" class="inputText" name="manufacturer" placeholder="input" /></td>
+				</tr>
+				<tr>
+					<th>Category</th>
+					<td><input type="text" class="inputText" name="category" placeholder="input" /></td>
+				</tr>
+			</table>
+			<button type="button" onclick="check()" style="height:30px; margin:5px 0px;">submit</button>
+		</div>
+	</form>
+	</div>
+</body>
 </html>

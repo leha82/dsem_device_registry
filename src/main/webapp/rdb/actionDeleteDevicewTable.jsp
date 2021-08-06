@@ -8,22 +8,20 @@
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	
-	DeviceInfo di = dbm.getModifyDeviceIdList(device_id);
-	dbm.deleteDevice(device_id);
+	DeviceInfo di = dbm.getDeviceInfo(device_id);
+
+	dbm.deleteTableDeviceMeasurement(di.getTable_name());
+	dbm.deleteDeviceInfo(device_id);
 	// 자동 생성 테이블 삭제 코드 
-	dbm.deleteMeasurementTable(di.gettable_name());
 	dbm.disconnect();
 
-	// 자동 생성 테이블 삭제 코드
-//	AutoDBConnector adb = new AutoDBConnector();
-	//adb.deleteTable(dl.gettable_name());	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 
 <script type="text/javascript">
-window.location.replace("deviceList.jsp");
+	window.location.replace("deviceList.jsp");
 </script>
 
 <title>delete m_delete.jsp</title>

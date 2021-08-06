@@ -2,19 +2,19 @@ package structures.mysql;
 
 //import com.sun.jmx.snmp.Timestamp;
 
-public class DeviceCommon {
+public class ItemCommon {
 	private int id;
 	private String model_name;
-	private java.sql.Timestamp registration_time;
+	private String registration_time;
 	private String device_type;
 	private String manufacturer;
 	private String category;
 
-	public DeviceCommon() {
+	public ItemCommon() {
 		this(0,"",null,"","","");
 	}
 	
-	public DeviceCommon(int id, String model_name, java.sql.Timestamp registration_time, String device_type, String manufacturer,String category) {
+	public ItemCommon(int id, String model_name, String registration_time, String device_type, String manufacturer,String category) {
 		this.id = id;
 		this.model_name = model_name;
 		this.registration_time = registration_time;
@@ -30,18 +30,18 @@ public class DeviceCommon {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getmodel_name() {
+	public String getModel_name() {
 		return model_name;
 	}
 
-	public void setmodel_name(String model_name) {
+	public void setModel_name(String model_name) {
 		this.model_name = model_name;
 	}
-	public java.sql.Timestamp getregistration_time() {
+	public String getRegistration_time() {
 		return registration_time;
 	}
 
-	public void setregistration_time(java.sql.Timestamp timestamp) {
+	public void setRegistration_time(String timestamp) {
 		this.registration_time = timestamp;
 	}
 

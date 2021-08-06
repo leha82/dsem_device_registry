@@ -13,15 +13,21 @@ public class DeviceInfo {
 	private String longitude;
 
 	public DeviceInfo() {
-		this(0, 0, "", "", "", "", "", "", "");
+		this(0, 0, "", "", "", "", "", "", "", "");
 	}
 
 	public DeviceInfo(int id, int item_id, String system_id, String device_name, String table_name, String deployment_time, 
+			String deployment_location, String latitude, String longitude) {
+		this(id, item_id, system_id, device_name, "", table_name, deployment_time, deployment_location, latitude, longitude);
+	}
+	
+	public DeviceInfo(int id, int item_id, String system_id, String device_name, String item_name, String table_name, String deployment_time, 
 			String deployment_location, String latitude, String longitude) {
 		this.device_id = id;
 		this.item_id = item_id;
 		this.system_id = system_id;
 		this.device_name = device_name;
+		this.item_name = item_name;
 		this.table_name = table_name;
 		this.deployment_time = deployment_time;
 		this.deployment_location = deployment_location;
@@ -29,75 +35,75 @@ public class DeviceInfo {
 		this.longitude = longitude;
 	}
 
-	public int getdevice_id() {
+	public int getDevice_id() {
 		return device_id;
 	}
 
-	public void setdevice_id(int device_id) {
+	public void setDevice_id(int device_id) {
 		this.device_id = device_id;
 	}
 
-	public int getitem_id() {
+	public int getItem_id() {
 		return item_id;
 	}
 
-	public void setitem_id(int item_id) {
+	public void setItem_id(int item_id) {
 		this.item_id = item_id;
 	}
 	
-	public String getsystem_id() {
+	public String getSystem_id() {
 		return system_id;
 	}
 
-	public void setsystem_id(String system_id) {
+	public void setSystem_id(String system_id) {
 		this.system_id = system_id;
 	}
 	
-	public String getdevice_name() {
+	public String getDevice_name() {
 		return device_name;
 	}
 
-	public void setdevice_name(String device_name) {
+	public void setDevice_name(String device_name) {
 		this.device_name = device_name;
 	}
 	
-	public String gettable_name() {
+	public String getTable_name() {
 		return table_name;
 	}
 
-	public void settable_name(String table_name) {
+	public void setTable_name(String table_name) {
 		this.table_name = table_name;
 	}
 	
-	public String getdeployment_time() {
+	public String getDeployment_time() {
 		return deployment_time;
 	}
 
-	public void setdeployment_time(String deployment_time) {
+	public void setDeployment_time(String deployment_time) {
 		this.deployment_time = deployment_time;
 	}
 	
-	public String getdeployment_location() {
+	public String getDeployment_location() {
 		return deployment_location;
 	}
 
-	public void setdeployment_location(String deployment_location) {
+	public void setDeployment_location(String deployment_location) {
 		this.deployment_location = deployment_location;
 	}
 	
-	public String getlatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
 
-	public void setlatitude(String latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getlongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
 
-	public void setlongitude(String longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
 

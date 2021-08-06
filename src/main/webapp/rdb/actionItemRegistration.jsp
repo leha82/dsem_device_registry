@@ -7,19 +7,19 @@
 <%//actionRegistration.jsp %>
 
 <%
-	request.setCharacterEncoding("UTF-8");
+request.setCharacterEncoding("UTF-8");
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
-	DeviceCommon dc = new DeviceCommon();
-
-	Timestamp now_timestamp = new Timestamp(System.currentTimeMillis());
-	dc.setmodel_name(request.getParameter("model1"));
-	dc.setregistration_time(now_timestamp);
-	dc.setDevice_type(request.getParameter("dv1"));
-	dc.setManufacturer(request.getParameter("manufac1"));
-	dc.setCategory(request.getParameter("cate1"));
+	ItemCommon ic = new ItemCommon();
+	//Timestamp now_timestamp = new Timestamp(System.currentTimeMillis());
 	
-	dbm.insertGlobalList(dc);
+	ic.setModel_name(request.getParameter("model_name"));
+//	ic.setRegistration_time(now_timestamp);
+	ic.setDevice_type(request.getParameter("device_type"));
+	ic.setManufacturer(request.getParameter("manufacturer"));
+	ic.setCategory(request.getParameter("category"));
+	
+	dbm.insertItemCommon(ic);
 	dbm.disconnect();
 %>
 <!DOCTYPE html>
@@ -33,7 +33,7 @@
         function goBack(){
         window.history.back();
         	}
-        window.location.replace("deviceItemList.jsp");
+        window.location.replace("itemList.jsp");
     </script>
 </head>
 </html>

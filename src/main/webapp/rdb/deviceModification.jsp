@@ -83,49 +83,49 @@
 			<button type="button" onclick="goBack();">Back</button>
 		</div>
 		<div class = "DeviceInfo">
-			<h2>Device id : <%= di.getdevice_id() %> </h2>
+			<h2>Device id : <%=di.getDevice_id()%> </h2>
 			<h2 style = "text-align: left;">Device Metadata</h2>
 			<table>
 				<tr>
 					<th>Device id</th>
-					<td><input type="text" class="inputText" id="no_border" name="device_id" value="<%= di.getdevice_id() %>">
+					<td><input type="text" class="inputText" id="no_border" name="device_id" value="<%=di.getDevice_id()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>Device name</th>
-					<td><input type="text" class="inputText"  name="device_name" value="<%= di.getdevice_name() %>">
+					<td><input type="text" class="inputText"  name="device_name" value="<%=di.getDevice_name()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>Item id</th>
-					<td><input type="text" class="inputText" id="item_id" name="item_id" value="<%= di.getitem_id() %>">
+					<td><input type="text" class="inputText" id="item_id" name="item_id" value="<%=di.getItem_id()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>System id</th>
-					<td><input type="text" class="inputText" id="system_id" name="system_id" value="<%= di.getsystem_id() %>">
+					<td><input type="text" class="inputText" id="system_id" name="system_id" value="<%=di.getSystem_id()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>Deployment time</th>
 					<td><input type="text" class="inputText" id="deployment_time" name="deployment_time" 
-							value="<%= di.getdeployment_time() %>">
+							value="<%=di.getDeployment_time()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>Deployment location</th>
 					<td><input type="text" class="inputText" id="deployment_location" name="deployment_location" 
-							value="<%= di.getdeployment_location() %>">
+							value="<%=di.getDeployment_location()%>">
 					</td>
 				</tr>
 				<tr>
 					<th>Latitude</th>
 					<td><input type="text" class="inputText" id="latitude" name="latitude" 
-							value="<%= di.getlatitude() %>"></td>
+							value="<%=di.getLatitude()%>"></td>
 				</tr>
 				<tr>
 					<th>longitude</th>
-					<td><input type="text" class="inputText" id="longitude" name="longitude" value="<%= di.getlongitude() %>"></td>
+					<td><input type="text" class="inputText" id="longitude" name="longitude" value="<%=di.getLongitude()%>"></td>
 				</tr>
 			</table>
 		</div>

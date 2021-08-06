@@ -7,63 +7,96 @@
 <%
 request.setCharacterEncoding("UTF-8");
 	int id = Integer.parseInt(request.getParameter("id")); 
-	
+	System.out.println(id);
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
-	DeviceCommon dc = new DeviceCommon();
+	ItemCommon ic = new ItemCommon();
 	
-	dc.setId(id);
-	dc.setmodel_name(request.getParameter("model_name"));
-	dc.setDevice_type(request.getParameter("device_type"));
-	dc.setManufacturer(request.getParameter("manufacturer"));
-	dc.setCategory(request.getParameter("category"));
-	dbm.updateGlobalList(dc);
+	ic.setId(id);
+	ic.setModel_name(request.getParameter("model_name"));
+	ic.setDevice_type(request.getParameter("device_type"));
+	ic.setManufacturer(request.getParameter("manufacturer"));
+	ic.setCategory(request.getParameter("category"));
+	dbm.updateItemCommon(ic);
 	//dbm.disconnect();
 
 	Connection conn2 = null;
 	PreparedStatement pstmt2 = null;
 	request.setCharacterEncoding("UTF-8");
 
-	ArrayList<String> new_keylist = new ArrayList<String>();
-	ArrayList<String> new_valuelist = new ArrayList<String>();
+	ArrayList<Integer> seqList = new ArrayList<Integer>();
+	ArrayList<String> groupList = new ArrayList<String>();
+	ArrayList<String> keyList = new ArrayList<String>();
+	ArrayList<String> valueList = new ArrayList<String>();
 	
-	String DSize = request.getParameter("Dsize");
-	String key [] = new String [Integer.valueOf(DSize)];
-	String value [] = new String [Integer.valueOf(DSize)];
+	String isSize = request.getParameter("isSize");
+	int size = Integer.valueOf(isSize);
 
-	System.out.println("size test = " + DSize);
+	System.out.println("size test = " + size);
 	
-	for(int i = 0; i < Integer.valueOf(DSize); i++){
+	for(int i = 0; i < size; i++) {
+		String mdseq = request.getParameter("Dseq" + i);
+		String mdgroup = request.getParameter("Dgroup" + i);
 		String mdkey = request.getParameter("Dkey" + i);
 		String mdvalue =  request.getParameter("Dvalue" + i);
-		
-		System.out.print(i + " - key : " + mdkey + " |  value : " + mdvalue);
-		
-		if ( !(mdkey=="" || mdkey==null 
-	|| mdvalue == "" || mdvalue==null)) {
-	if (!(mdkey.equals("null") && mdvalue.equals("null"))) {
-		new_keylist.add(mdkey);
-		new_valuelist.add(mdvalue);
-		
-		System.out.print("  added");	
-	}
+
+		System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
+
+		int seq=0;
+
+		if (!(mdseq=="" || mdseq==null || mdseq.equals("null")))	
+			seq= Integer.parseInt(mdseq);
+	
+		if (!(mdgroup=="" || mdgroup==null || mdgroup.equals("null")) &&
+			!(mdkey=="" || mdkey==null || mdkey.equals("null")) &&
+			!(mdvalue == "" || mdvalue==null || mdvalue.equals("null"))) {
+			seqList.add(seq);
+			groupList.add(mdgroup);
+			keyList.add(mdkey);
+			valueList.add(mdvalue);
+//			System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
+			System.out.print("  added");	
 		}
 		System.out.println();
 	}
+	
+	ArrayList<String> sortedGroup = new ArrayList<String>();
+	ArrayList<String> sortedKey = new ArrayList<String>();
+	ArrayList<String> sortedValue = new ArrayList<String>();
     
-     dbm.deleteSpecificItem(id);
-     dbm.insertSpecificList(id, new_keylist, new_valuelist);
-     dbm.disconnect();
-    
-//	DBManager dbm = new DBManager();
-//dbm.connect();
-
-//DeviceInfo dl = dbm.getDeviceInfo(id);
-//dbm.disconnect();
-
-//AutoDBConnector adb = new AutoDBConnector();
-//adb.deleteTable(dl.gettable_name());
-//adb.createTable(id, dl.gettable_name());
+	// sorting group,key,value array by seq list
+	int seq=0; 
+	while (seqList.size()>0) {
+		// find min value greater than 0
+		int min = seqList.get(0);
+		int minindex = 0;
+		for (int i=1; i<seqList.size(); i++) {
+			if (seqList.get(i) > 0) {
+				if (min <= 0 || min > seqList.get(i)) {
+					min = seqList.get(i);
+					minindex = i; 
+				}
+			}
+		}
+		System.out.print("index : " + (seq+1) + " | min : " + min + " | min seq index : " + minindex);
+		sortedGroup.add(groupList.get(minindex));
+		sortedKey.add(keyList.get(minindex));
+		sortedValue.add(valueList.get(minindex));
+		
+		System.out.println(" | seq : " + seqList.get(minindex) + " | group : " + groupList.get(minindex) 
+							+ " | key : " + keyList.get(minindex) + " | value : " + valueList.get(minindex));
+		
+		seqList.remove(minindex);
+		groupList.remove(minindex);
+		keyList.remove(minindex);
+		valueList.remove(minindex);
+		seq++;
+	}
+	
+	dbm.deleteItemSpecific(id);
+	dbm.insertItemSpecific(id, sortedGroup, sortedKey, sortedValue);
+     
+	dbm.disconnect();
 %>
 <html>
 <head>
@@ -71,7 +104,7 @@ request.setCharacterEncoding("UTF-8");
 		function goBack(){
 			window.history.back();
 		}
-		window.location.replace("deviceDetail.jsp?id=<%=id %>");
+		window.location.replace("itemDetail.jsp?id=<%=id%>");
 	</script>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>Device metadata modification page</title>

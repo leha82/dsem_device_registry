@@ -27,26 +27,26 @@
 </html>
 
 <%
-	request.setCharacterEncoding("UTF-8");
-	int item_id = Integer.parseInt(request.getParameter("item_id"));
-
+request.setCharacterEncoding("UTF-8");
 	DBManager dbm = new DBManager(application.getRealPath("/"));
+	
 	dbm.connect();
-	DeviceCommon dc = dbm.getDeviceCommon(item_id);
+//	int item_id = Integer.parseInt(request.getParameter("item_id"));
+//	ItemCommon ic = dbm.getItemCommon(item_id);
 	
 	DeviceInfo di = new DeviceInfo();
 	
-	di.setitem_id(Integer.parseInt(request.getParameter("item_id")));
-	di.setsystem_id(request.getParameter("system_id"));
-	di.setItem_name(dc.getmodel_name());
-	di.setdevice_name(request.getParameter("device_name"));
-	di.settable_name("table_name");
-	di.setdeployment_time(request.getParameter("deployment_time"));
-	di.setdeployment_location(request.getParameter("deployment_location"));
-	di.setlatitude(request.getParameter("lat"));
-	di.setlongitude(request.getParameter("lon"));
+	di.setItem_id(Integer.parseInt(request.getParameter("item_id")));
+	di.setSystem_id(request.getParameter("system_id"));
+//	di.setItem_name(ic.getModel_name());
+	di.setDevice_name(request.getParameter("device_name"));
+	di.setTable_name("table_name");
+	di.setDeployment_time(request.getParameter("deployment_time"));
+	di.setDeployment_location(request.getParameter("deployment_location"));
+	di.setLatitude(request.getParameter("lat"));
+	di.setLongitude(request.getParameter("lon"));
 	
-	dbm.insertDeviceList(di);
+	dbm.insertDeviceInfo(di);
 // 테이블 이름 잘라서 생성
 
 	int device_id = dbm.getLastDeviceId();
@@ -55,13 +55,13 @@
 	String tableno = "0000" + device_id;
 	String table_name = "device" + tableno.substring(tableno.length() - 4);
 
-	di.setdevice_id(device_id);
-	di.settable_name(table_name);
+	di.setDevice_id(device_id);
+	di.setTable_name(table_name);
 	
 	dbm.updateDeviceTableName(device_id, table_name);
 	
 // 자동 생성 테이블
-	dbm.createMeasurementTable(di.getitem_id(), di.gettable_name());
+	dbm.createTable_DeviceMeasurement(di.getItem_id(), di.getTable_name());
 	
 	dbm.disconnect();
 %>

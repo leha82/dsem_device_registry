@@ -5,13 +5,15 @@
 "http://www.w3.org/TR/html4/loose.dtd">
     
 <%
-	int item_id = Integer.parseInt(request.getParameter("id"));
+    int item_id = Integer.parseInt(request.getParameter("id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
+
 	dbm.connect();
 	ItemCommon ic = dbm.getItemCommon(item_id);
 	ItemSpecific is = dbm.getItemSpecific(item_id);
 	dbm.disconnect();	
+
 %>
     
 <html>
@@ -25,7 +27,7 @@
 		}
 		function confirmDelete() {
 			if (confirm('Delete Item <%=ic.getModel_name()%> ?')) {
-				location.href='actionDetail.jsp?id=<%=ic.getId()%>';
+				location.href='actionDeleteItem.jsp?id=<%=ic.getId()%>';
 			}
 		}
     </script>
@@ -35,12 +37,12 @@
 <body>
 	<div class="MainContent">
 		<div class="MenuBar" id="item_top">
-			<h1>Device Item Detail </h1>
+			<h1>Item Detail </h1>
 			<jsp:include page="menu.jsp" flush="false" />
 		</div>
 		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="button" onclick="confirmDelete();">delete</button> &nbsp;&nbsp;&nbsp;&nbsp;
-			<button class="SubMenuButton" type="button" onclick="location.href='deviceItemModification.jsp?id=<%=ic.getId()%>'">modify</button>
+			<button class="SubMenuButton" type="button" onclick="confirmDelete();">delete</button>
+			<button class="SubMenuButton" type="button" onclick="location.href='itemModification.jsp?id=<%=ic.getId()%>'">modify</button>
 			<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
 		</div>
 		<div class="DeviceInfo">

@@ -3,9 +3,11 @@
 	"DB_PORT":"input database port",
 	"DB_ID":"input database user id",
 	"DB_PW":"input database password",
-	"DB_REGISTRY_DB":"DeviceRegistry",
-	"DB_MEASUREMENT_DB":"Measurement",
-	"DB_GLOBAL_TABLE":"DeviceRegistry.global_metadata",
-	"DB_SPECIFIC_TABLE":"DeviceRegistry.specific_metadata",
-	"DB_DEVICE_TABLE":"DeviceRegistry.device_list"
+	"DBN_DEVICE_REGISTRY":"DeviceRegistry",
+	"DBN_DEVICE_MEASUREMENT":"Measurement",
+	"TABLE_COMMON":"DeviceRegistry.global_metadata",
+	"TABLE_SPECIFIC":"DeviceRegistry.specific_metadata",
+	"TABLE_DEVICE":"DeviceRegistry.device_list",
+	"METADATA_SENSOR":"sensor",
+	"METADATA_ACTUATOR":"actuator"
 }
