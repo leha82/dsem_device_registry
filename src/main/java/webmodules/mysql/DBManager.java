@@ -99,16 +99,13 @@ public class DBManager {
 
 			pstmt.setInt(1, ic.getId());
 			pstmt.setString(2, ic.getModel_name());
-//			pstmt.setString(3, ic.getRegistration_time());
 			pstmt.setString(3, ic.getDevice_type());
 			pstmt.setString(4, ic.getManufacturer());
 			pstmt.setString(5, ic.getCategory());
 
 			pstmt.executeUpdate();
-//			System.out.println("----------------------------------->>> Device Registration Success");
 		} catch (Exception e) {
 			e.printStackTrace();
-//			System.out.println("----------------------------------->>> Device Registration Failure");
 		}
 	}
 	
@@ -283,10 +280,7 @@ public class DBManager {
 		ArrayList<DeviceInfo> dlist = new ArrayList<DeviceInfo>(); 
 		try {
 			ResultSet rs = null;
-//			String sql = "SELECT device_id, item_id, system_id, device_name, table_name, deployment_time,"
-//						+ " deployment_location, latitude, longitude "
-//						+ " FROM " + tblDevice;
-//			
+	
 			String sql = "SELECT d.device_id, d.item_id, ic.model_name, d.system_id, d.device_name, "
 					+ "d.table_name, d.deployment_time, d.deployment_location, d.latitude, d.longitude "
 					+ "FROM " + tblDevice + " d, " + tblCommon + " ic "
@@ -327,11 +321,7 @@ public class DBManager {
 						+ "d.table_name, d.deployment_time, d.deployment_location, d.latitude, d.longitude "
 						+ "FROM " + tblDevice + " d, " + tblCommon + " ic "
 						+ "WHERE d.device_id = " + device_id + " AND d.item_id = ic.item_id;";
-//			
-//			String sql = "SELECT device_id, item_id, system_id, device_name, table_name, "
-//					+ "deployment_time, deployment_location, latitude, longitude"
-//					+ " FROM " + tblDevice 
-//					+ " WHERE device_id = " + device_id;
+
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -347,17 +337,6 @@ public class DBManager {
 				di.setLatitude(rs.getString(9));
 				di.setLongitude(rs.getString(10));
 			}
-//			
-//			sql = "SELECT model_name"
-//					+ " FROM " + tblGlobal  
-//					+ " WHERE item_id = " + di.getitem_id();
-//			rs = stmt.executeQuery(sql);
-//
-//			while (rs.next()) {
-//				di.setItem_name(rs.getString(1));
-//			}
-//			
-			System.out.println(di.toString());
 			
 			rs.close();
 			stmt.close();
@@ -367,38 +346,6 @@ public class DBManager {
 		
 		return di;
 	}
-
-//	public DeviceInfo getModifyDeviceInfo(int device_id){
-//		DeviceInfo di = new DeviceInfo(); 
-//		try {
-//			ResultSet rs = null;
-//			String sql = "SELECT device_id, item_id, system_id, device_name, table_name,"
-//						+ " deployment_time, deployment_location, latitude, longitude"
-//						+ " FROM " + tblDevice 
-//						+ " WHERE device_id = '" + device_id + "';";
-//			PreparedStatement pstmt = conn.prepareStatement(sql);
-//			rs = pstmt.executeQuery();
-//			
-//			while (rs.next()) {
-//				di.setDevice_id(rs.getInt(1));
-//				di.setItem_id(rs.getInt(2));
-//				di.setSystem_id(rs.getString(3));
-//				di.setDevice_name(rs.getString(4));
-//				di.setTable_name(rs.getString(5));
-//				di.setDeployment_time(rs.getString(6));
-//				di.setDeployment_location(rs.getString(7));
-//				di.setLatitude(rs.getString(8));
-//				di.setLongitude(rs.getString(9));
-//				System.out.println(di.toString());
-//			}
-//			rs.close();
-//			pstmt.close();
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//		
-//		return di;
-//	}
 	
 	public void insertDeviceInfo(DeviceInfo di) {
 		try {
@@ -420,10 +367,10 @@ public class DBManager {
 
 			pstmt.executeUpdate();
 
-			System.out.println("----------------------------------->>> Device Registration Success");
+//			System.out.println("----------------------------------->>> Device Registration Success");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("----------------------------------->>> Device Registration Failure");
+//			System.out.println("----------------------------------->>> Device Registration Failure");
 		}
 	}
 
@@ -453,7 +400,7 @@ public class DBManager {
 		try {
 			String sql = "DELETE FROM " + tblDevice 
 						+ " WHERE device_id=?";
-			System.out.println(sql);
+//			System.out.println(sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, device_id);
@@ -470,7 +417,7 @@ public class DBManager {
 			String sql = "SELECT device_id " 
 						+ " FROM " + tblDevice 
 						+ " ORDER BY device_id DESC LIMIT 1;";
-			System.out.println(sql);
+//			System.out.println(sql);
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery();
 
@@ -556,7 +503,7 @@ public class DBManager {
 
 			Statement stmt = this.conn.createStatement();
 			stmt.executeUpdate(deleteSql);
-			System.out.println(table_name + " Table delete");
+//			System.out.println(table_name + " Table delete");
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();

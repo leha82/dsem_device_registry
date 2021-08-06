@@ -6,24 +6,23 @@
 
 <!-- Device metadata 수정 -->
 <%
-request.setCharacterEncoding("UTF-8");
+	request.setCharacterEncoding("UTF-8");
 	int device_id = Integer.parseInt(request.getParameter("device_id"));
 	int item_id = Integer.parseInt(request.getParameter("item_id"));
 	
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	DeviceInfo di = new DeviceInfo();
-	di.setItem_id(Integer.parseInt(request.getParameter("item_id")));
-	di.setSystem_id((String)request.getParameter("system_id"));
+	di.setDevice_id(device_id);
 	di.setDevice_name((String)request.getParameter("device_name"));
+	di.setSystem_id((String)request.getParameter("system_id"));
+	di.setItem_id(item_id);
 	di.setDeployment_time((String)request.getParameter("deployment_time"));
 	di.setDeployment_location((String)request.getParameter("deployment_location"));
 	di.setLatitude((String)request.getParameter("latitude"));
 	di.setLongitude((String)request.getParameter("longitude"));
-	di.setDevice_id(Integer.parseInt(request.getParameter("device_id")));
 	dbm.updateDeviceInfo(di);
 	dbm.disconnect();
-	System.out.println(item_id);
 %>
 
 <!-- 자동 테이블 생성 -->

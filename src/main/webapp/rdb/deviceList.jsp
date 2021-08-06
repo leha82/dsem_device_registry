@@ -21,7 +21,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" sype="text/css" href = "../css/main.css">
+	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	
 	<script location.href="./test?params=" + encodeURI(params); 
 			src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
@@ -39,7 +39,7 @@
 	<div class="MainContent">
 		<div class="MenuBar" id="device_top">
 			<h1>Device List</h1>
-			<jsp:include page="menu.jsp" flush="false" />
+			<jsp:include page="partMenuButton.jsp" flush="false" />
 		</div>
 		<div class="SubMenuBar">
 			<button class="SubMenuButton" type="button" onclick="location.href='deviceRegistration.jsp'">Register</button>
@@ -49,16 +49,14 @@
 				<th>Device id</th>
 				<th>Device name</th>
 				<th>System id</th>
+				<th>Table name</th>
 				<th>Item id</th>
 				<th>Item Model</th>
-				<th>Table name</th>
 				<th>Deployment time</th>
 				<th>Deployment location</th>
 				<th>Latitude</th>
 				<th>Longitude</th>
-				<th>Modify</th>
-				<th>Delete list</th>
-				<th>Delete list with Measurement table</th>
+				<th>Detail</th>
 			</thead>
 			<tbody>
 <%
@@ -69,22 +67,17 @@
 					<td><%=di.getDevice_id()%></td>
 					<td><%=di.getDevice_name()%></td>
 					<td><%=di.getSystem_id()%></td>
+					<td><%=di.getTable_name()%></td>
 					<td><a href="itemDetail.jsp?id=<%=di.getItem_id()%>"><%=di.getItem_id()%></a></td>
 					<td><a href="itemDetail.jsp?id=<%=di.getItem_id()%>"><%=di.getItem_name()%></a></td>
-					<td><%=di.getTable_name()%></td>
 					<td><%=di.getDeployment_time()%></td>
 					<td><%=di.getDeployment_location()%></td>
-					<td><%=di.getLatitude()%></td>
-					<td><%=di.getLongitude()%></td>
+					<td><%=di.getLatitude().substring(0, 10)%></td>
+					<td><%=di.getLongitude().substring(0, 10)%></td>
 					<td>
-						<button type="button" onclick="location.href='deviceModification.jsp?id=<%=di.getDevice_id()%>'" target="_blank" width="600px">modify</button>
-					</td>
-					<td>
-						<button type="button" onclick="location.href='actionDeleteDevice.jsp?id=<%=di.getDevice_id()%>&item_id=<%=di.getItem_id()%>'" target="_blank" width="600px">delete</button>
-					</td>
-					<td>
-						<button type="button" onclick="location.href='actionDeleteDevicewTable.jsp?id=<%=di.getDevice_id()%>&item_id=<%=di.getItem_id()%>'" target="_blank" width="600px">delete</button>
-					</td>
+						<button type="button" 
+							onclick="location.href='deviceDetail.jsp?id=<%=di.getDevice_id()%>'">detail</button>
+					</td> 
 				</tr>
 <%
 	}

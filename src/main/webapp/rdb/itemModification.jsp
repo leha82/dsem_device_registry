@@ -28,7 +28,7 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 	<!-- jQuery  -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
 			type="text/javascript"></script>
-	<link rel="stylesheet" sype="text/css" href = "../css/main.css">
+	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	<script type="text/javascript">   
        	function goBack(){
        		window.history.back();
@@ -43,7 +43,7 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 	<form name='itemmodifyform' action="actionItemModification.jsp" method="POST">
 		<div class="MenuBar" id="item_top">
 			<h1> Item Modification</h1>
-			<jsp:include page="menu.jsp" flush="false" />
+			<jsp:include page="partMenuButton.jsp" flush="false" />
 		</div>
 		<div class="SubMenuBar">
 			<button class="SubMenuButton" type="submit" id="changeBtn">confirm</button>
@@ -69,20 +69,17 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 				<tr>
 					<th>Model name</th>
 					<td><input type="text" class="inputText" id="model_name" name="model_name"
-							value="<%=ic.getModel_name()%>">
-					</td>
+							value="<%=ic.getModel_name()%>"></td>
 				</tr>
 				<tr>
 					<th>Device type</th>
 					<td><input type="text" class="inputText" id="device_type" name="device_type" 
-							value="<%=ic.getDevice_type()%>">
-					</td>
+							value="<%=ic.getDevice_type()%>"></td>
 				</tr>
 				<tr>
 					<th>Manufacturer</th>
 					<td><input type="text" class="inputText" id="manufacturer" name="manufacturer" 
-							value="<%=ic.getManufacturer()%>">
-					</td>
+							value="<%=ic.getManufacturer()%>"></td>
 				</tr>
 				<tr>
 					<th>Category</th>

@@ -3,8 +3,14 @@ a {
 	text-decoration-line:none;
 }
 
-a:hover{
+a:hover {
 	color:blue; 
+}
+
+input:read-only {
+	background-color: #EEEEEE;
+	border: 1px solid;
+/*	color:white;*/
 }
 
 h1 {
@@ -69,7 +75,6 @@ th, td {
 }	
 
 .inputText {
-/*	margin: 5px 0px;*/
 	width: 95%;
 	text-align : center;
 }

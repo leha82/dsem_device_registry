@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" sype="text/css" href = "../css/main.css">
+	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	<script
 		src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
 		type="text/javascript"></script>
@@ -36,7 +36,7 @@
 	<form name='myform' action="actionItemRegistration.jsp" method="post">
 		<div class="MenuBar" id="item_top">
 			<h1>Item Registration</h1>
-			<jsp:include page="menu.jsp" flush="false" />
+			<jsp:include page="partMenuButton.jsp" flush="false" />
 		</div>
 		<div class="SubMenuBar">
 			<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>

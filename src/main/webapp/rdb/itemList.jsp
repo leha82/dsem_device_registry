@@ -17,7 +17,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel="stylesheet" sype="text/css" href = "../css/main.css">
+	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	
 	<script location.href="./test?params="
 		+encodeURI(params); 
@@ -30,7 +30,7 @@
 	<div class="MainContent">
 		<div class="MenuBar" id="item_top">
 			<h1>Item List</h1>
-			<jsp:include page="menu.jsp" flush="false" />
+			<jsp:include page="partMenuButton.jsp" flush="false" />
 		</div>
 		<div class="SubMenuBar">
 			<button class="SubMenuButton" type="button" onclick="location.href='itemRegistration.jsp'">Register</button>
