@@ -1,26 +1,21 @@
-<%@page import="java.sql.*" pageEncoding="UTF-8" 
-import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
-<%@page import="java.io.*, java.util.*"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
-
-<!-- only delete device in devices table. -->
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.sql.*, java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
-int device_id = Integer.parseInt(request.getParameter("id"));
-	
+	int device_id = Integer.parseInt(request.getParameter("id"));
+	int type = Integer.parseInt(request.getParameter("type"));
+
 	DBManager dbm = new DBManager(application.getRealPath("/"));
+	
 	dbm.connect();
+	if (type==1) {
+		DeviceInfo di = dbm.getDeviceInfo(device_id);
+		dbm.deleteTableDeviceMeasurement(di.getTable_name());
+	}
+	
 	dbm.deleteDeviceInfo(device_id);
 	dbm.disconnect();
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<script type="text/javascript">
-window.location.replace("deviceList.jsp");
-</script>
-<title>delete m_delete.jsp</title>
-</head>
-<body>
 
-</body>
-</html>
+	out.println("<script type='text/javascript'>");
+	out.println("	location.href='deviceList.jsp';");
+	out.println("</script>");
+%>

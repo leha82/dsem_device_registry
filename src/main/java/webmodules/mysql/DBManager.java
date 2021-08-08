@@ -288,7 +288,7 @@ public class DBManager {
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			
+//			System.out.println("Get Device List : ");
 			while (rs.next()) {
 				DeviceInfo di = new DeviceInfo();
 				di.setDevice_id(rs.getInt(1));
@@ -347,7 +347,7 @@ public class DBManager {
 		return di;
 	}
 	
-	public void insertDeviceInfo(DeviceInfo di) {
+	public boolean insertDeviceInfo(DeviceInfo di) {
 		try {
 			String sql = "INSERT INTO " + tblDevice 
 						+ " (item_id, system_id, device_name, table_name, deployment_time,"
@@ -371,7 +371,9 @@ public class DBManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 //			System.out.println("----------------------------------->>> Device Registration Failure");
+			return false;
 		}
+		return true;
 	}
 
 	public void updateDeviceInfo(DeviceInfo di) {
@@ -433,7 +435,7 @@ public class DBManager {
 		return device_id;
 	}
 		
-	public void updateDeviceTableName(int device_id, String table_name) {
+	public boolean updateDeviceTableName(int device_id, String table_name) {
 		try {
 			String sql = "UPDATE " + tblDevice 
 						+ " SET table_name=?"
@@ -442,13 +444,20 @@ public class DBManager {
 
 			pstmt.setString(1, table_name);
 			pstmt.setInt(2, device_id);
+			
+			System.out.println(pstmt.toString());
+			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("update error");
+			return false;
 		}
+		System.out.println("update success");
+		return true;
 	}
 		
-	public void createTable_DeviceMeasurement(int item_id, String table_Name) {
+	public boolean createTable_DeviceMeasurement(int item_id, String table_Name) {
 		ArrayList<String> keyList = new ArrayList<String>();
 
 		try {
@@ -493,7 +502,11 @@ public class DBManager {
 
 		catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Error is occured in createTable_DeviceMeasurement()");
+			return false;
 		}
+		
+		return true;
 	}
 	
 	// delete measurement table

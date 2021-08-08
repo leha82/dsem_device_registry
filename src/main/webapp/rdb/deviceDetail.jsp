@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
-	<%@page import="java.io.*, java.util.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-"http://www.w3.org/TR/html4/loose.dtd">
-    
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
 	int device_id = Integer.parseInt(request.getParameter("id"));
 
@@ -15,25 +11,25 @@
 	
 	request.setAttribute("itemspecific", is);
 %>
-    
+
+<!DOCTYPE html>
 <html>
 <head>
-	<!-- jQuery  -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
-	
 	<script type="text/javascript">   
 		function goBack() {
 			window.history.back();
 		}
+		
 		function confirmDelete(num) {
 			if (num==1) {
 				if (confirm('Delete device <%= di.getDevice_name() %> with measurement table?')) {
-					location.href='actionDeleteDevicewTable.jsp?id=<%= device_id %>';
+					location.href='actionDeleteDevice.jsp?id=<%= device_id %>&type=1';
 				}
 			} else if (num==2) {
 				if (confirm('Delete only device <%= di.getDevice_name() %> record in device list?')) {
-					location.href='actionDeleteDevice.jsp?id=<%= device_id %>';
+					location.href='actionDeleteDevice.jsp?id=<%= device_id %>&type=2';
 				}
 			} else {
 				
@@ -43,24 +39,26 @@
 	<title>Device Detail</title>
 </head>
 <body>
-	<div class="MainContent">
-		<div class="MenuBar" id="device_top">
-			<h1>Item Detail </h1>
-			<jsp:include page="partMenuButton.jsp" flush="false" />
+	<header>
+		<jsp:include page="partDeviceHeader.jsp" flush="false" />
+	</header>
+	<main>
+		<div class="SubTitleBar">
+			<h1>Device Detail</h1>
 		</div>
-		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="button" onclick="confirmDelete(1);">delete with table</button>
-			<button class="SubMenuButton" type="button" onclick="confirmDelete(2);">delete only record</button>
-			<button class="SubMenuButton" type="button" onclick="location.href='deviceModification.jsp?id=<%=device_id%>'">modify</button>
-			<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
-			<h2 style="text-align:center;">[<%= device_id %>] <%=di.getDevice_name()%></h2>
-
-		</div>
-		<div class="DeviceInfo">
+		<h2>[<%= device_id %>] <%=di.getDevice_name()%></h2>
+		<div class="NarrowTable">
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="location.href='deviceModification.jsp?id=<%=device_id%>'">modify</button>
+				<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
+			</div>
+			Device Information
 			<table>
 				<thead>
-					<th style="width: 30%;">Metadata</th>
-					<th style="width: 70%;">Value</th>
+					<tr>
+						<th style="width: 30%;">Attribute</th>
+						<th style="width: 70%;">Value</th>
+					</tr>
 				</thead>
 				<tr>
 					<th>Device id</th>
@@ -104,9 +102,13 @@
 				</tr>
 			</table>
 			<br><br>
-			<h2 style = "text-align: left;">Specific Metadata</h2>
 			<jsp:include page="partSpecificDetail.jsp" flush="false" />
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="confirmDelete(1);">delete device with table</button>
+				<button class="SubMenuButton" type="button" onclick="confirmDelete(2);">delete device only record</button>
+			</div>
+			<br><br>
 		</div>
-	</div>
+	</main>
 </body>
 </html>

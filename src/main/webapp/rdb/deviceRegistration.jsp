@@ -1,14 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
-		type="text/javascript"></script>
 	<script type="text/javascript">
+	    function goBack(){
+			window.history.back();
+		}
+	    
 		function check() {
 			if (myform.item_id.value == "" || myform.deployment_time.value == ""
 					|| myform.lat.value == "" ) {
@@ -21,12 +23,7 @@
 				return false;
 			}
 			
-			//document.myform.action = "actionDeviceRegistration.jsp";
 			document.myform.submit();
-		}
-	
-        function goBack(){
-			window.history.back();
 		}
 	</script>
 	
@@ -34,20 +31,22 @@
 </head>
 
 <body>
-	<div class="MainContent">
-	<form name='myform' action="actionDeviceRegistration.jsp" method="post">
-		<div class="MenuBar" id="device_top">
-			<h1>Device Registration</h1>
-			<jsp:include page="partMenuButton.jsp" flush="false" />
+	<header>
+		<jsp:include page="partDeviceHeader.jsp" flush="false" />
+	</header>
+	<main>
+		<div class="SubTitleBar">
+			<h1>Register New Device</h1>
 		</div>
-		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>
-		</div>
-		<div class="DeviceInfo">
-			<h2>Register New Device</h2>
+		<form name='myform' action="actionDeviceRegistration.jsp" method="post">
+		<div class="NarrowTable">
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="check()">submit</button>
+				<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>
+			</div>
 			<table>
 				<thead>
-						<th style="width: 30%;">Metadata</th>
+						<th style="width: 30%;">Attribute</th>
 						<th style="width: 70%;">Value</th>
 				</thead>
 				<tr>
@@ -85,7 +84,6 @@
 					<td><input type="text" class="inputText" name="lon" placeholder="Input" /></td>
 				</tr>
 			</table>
-			<button type="button" onclick="check()" style="height:30px; margin:5px 0px;">submit</button>
 		</div>
 	</form>
 	</div>

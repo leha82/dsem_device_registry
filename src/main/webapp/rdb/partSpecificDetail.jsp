@@ -16,6 +16,7 @@
 <title>Show table about Specific Metadata</title>
 </head>
 <body>
+	Specific Information
 	<table>
 		<thead>
 			<th style="width:10%;">Group</th>
@@ -34,6 +35,5 @@
 	}
 %>
 	</table>
-	<br><br>
 </body>
 </html>

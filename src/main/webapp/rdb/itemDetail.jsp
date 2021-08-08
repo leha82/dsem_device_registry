@@ -1,9 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
-	<%@page import="java.io.*, java.util.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-"http://www.w3.org/TR/html4/loose.dtd">
-    
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
     int item_id = Integer.parseInt(request.getParameter("id"));
 
@@ -17,15 +13,16 @@
 	request.setAttribute("itemspecific", is);
 %>
     
+<!DOCTYPE html>
 <html>
 <head>
-	<!-- jQuery  -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	<script type="text/javascript">   
 		function goBack() {
 			window.history.back();
 		}
+		
 		function confirmDelete() {
 			if (confirm('Delete Item <%=ic.getModel_name()%> ?')) {
 				location.href='actionDeleteItem.jsp?id=<%=ic.getId()%>';
@@ -36,23 +33,23 @@
 	<title>Device Item Metadata Detail</title>
 </head>
 <body>
-	<div class="MainContent">
-		<div class="MenuBar" id="item_top">
-			<h1>Item Detail </h1> 
-			<jsp:include page="partMenuButton.jsp" flush="false" />
+	<header>
+		<jsp:include page="partItemHeader.jsp" flush="false" />
+	</header>
+	<main>
+		<div class="SubTitleBar">
+			<h1>Item Detail</h1>
 		</div>
-		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="button" onclick="confirmDelete();">delete</button>
-			<button class="SubMenuButton" type="button" onclick="location.href='itemModification.jsp?id=<%=ic.getId()%>'">modify</button>
-			<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
-			<h2 style="text-align:center;">[<%= ic.getId() %>] <%=ic.getModel_name()%></h2>
-		</div>
-		<div class="DeviceInfo">
-			<h2 style = "text-align: left;">Common Metadata</h2>
-			
+		<h2>[<%= ic.getId() %>] <%=ic.getModel_name()%></h2>
+		<div class="NarrowTable">
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="location.href='itemModification.jsp?id=<%=ic.getId()%>'">modify</button>
+				<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
+			</div>
+			Common Information
 			<table>
 				<thead>
-					<th style="width: 30%;">Metadata</th>
+					<th style="width: 30%;">Attribute</th>
 					<th style="width: 70%;">Value</th>
 				</thead>
 				<tr>
@@ -82,9 +79,12 @@
 				</tr>
 			</table>
 			<br><br>
-			<h2 style = "text-align: left;">Specific Metadata</h2>
 			<jsp:include page="partSpecificDetail.jsp" flush="false" />
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="confirmDelete();">delete item</button>
+			</div>
+			<br><br>
 		</div>
-	</div>
+	</main>
 </body>
 </html>

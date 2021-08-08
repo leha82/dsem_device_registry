@@ -1,15 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%//deviceRegistration.jsp %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
-	<script
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
-		type="text/javascript"></script>
+	
 	<script type="text/javascript">
+		function goBack(){
+			window.history.back();
+		}
+		
 		function check() {
 			if (myform.model_name.value == "" || myform.device_type.value == ""
 					|| myform.manufacturer.value == "" ) {
@@ -19,30 +20,26 @@
 				myform.manufacturer.focus();
 				return false;
 			}
-//			document.myform.action = "actionItemRegistration.jsp";
 			document.myform.submit();
-		}
-	</script>
-	<script type="text/javascript">   
-		function goBack(){
-			window.history.back();
 		}
 	</script>
     <title>Device Item Register</title>
 </head>
 
 <body>
-	<div class="MainContent">
-	<form name='myform' action="actionItemRegistration.jsp" method="post">
-		<div class="MenuBar" id="item_top">
-			<h1>Item Registration</h1>
-			<jsp:include page="partMenuButton.jsp" flush="false" />
+	<header>
+		<jsp:include page="partItemHeader.jsp" flush="false" />
+	</header>
+	<main>
+		<div class="SubTitleBar">
+			<h1>Register New Item</h1>
 		</div>
-		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>
-		</div>
-		<div class="DeviceInfo">
-			<h2>Register New Device Item</h2>
+		<form name='myform' action="actionItemRegistration.jsp" method="post">
+		<div class="NarrowTable">
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="button" onclick="check()">submit</button>
+				<button class="SubMenuButton" type="button" class="back" onclick="goBack();">back</button>
+			</div>
 			<table>
 				<thead>
 					<th style="width: 30%;">Metadata</th>
@@ -65,9 +62,8 @@
 					<td><input type="text" class="inputText" name="category" placeholder="input" /></td>
 				</tr>
 			</table>
-			<button type="button" onclick="check()" style="height:30px; margin:5px 0px;">submit</button>
 		</div>
-	</form>
-	</div>
+		</form>
+	</main>
 </body>
 </html>

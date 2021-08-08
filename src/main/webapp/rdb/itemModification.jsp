@@ -1,11 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
-	<%@page import="java.io.*, java.util.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-"http://www.w3.org/TR/html4/loose.dtd">
-
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
-int item_id = Integer.parseInt(request.getParameter("id"));
+	int item_id = Integer.parseInt(request.getParameter("id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	
@@ -16,18 +12,19 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 	
 	dbm.disconnect();
 
-	for(int i=0; i<is.size(); i++) {
-		System.out.println("group #" + (i+1) + " : " + is.getGroup(i));
-		System.out.println("key #" + (i+1) + " : " + is.getKey(i));
-		System.out.println("value #" + (i+1) + " : " + is.getValue(i));
-	}
+//	for(int i=0; i<is.size(); i++) {
+//		System.out.println("group #" + (i+1) + " : " + is.getGroup(i));
+//		System.out.println("key #" + (i+1) + " : " + is.getKey(i));
+//		System.out.println("value #" + (i+1) + " : " + is.getValue(i));
+//	}
 %>
-    
+
+<!DOCTYPE html> 
 <html>
 <head>
-	<!-- jQuery  -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"
-			type="text/javascript"></script>
+	<!-- jQuery -->  
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" 
+		type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
 	<script type="text/javascript">   
        	function goBack(){
@@ -39,32 +36,38 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 </head>
 
 <body>
-	<div class="MainContent">
-	<form name='itemmodifyform' action="actionItemModification.jsp" method="POST">
-		<div class="MenuBar" id="item_top">
-			<h1> Item Modification</h1>
-			<jsp:include page="partMenuButton.jsp" flush="false" />
+	<header>
+		<jsp:include page="partItemHeader.jsp" flush="false" />
+	</header>
+	<main>
+		<div class="SubTitleBar">
+			<h1>Item Modification</h1>
 		</div>
-		<div class="SubMenuBar">
-			<button class="SubMenuButton" type="submit" id="changeBtn">confirm</button>
-			<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
+		<h2>[<%=ic.getId()%>] <%=ic.getModel_name()%></h2>
 		</div>
-		<div class = "DeviceInfo">
-			<h2>[<%=ic.getId()%>] <%=ic.getModel_name()%></h2>
-			<h2 style = "text-align: left;">Common Metadata</h2>
+		<form name='formitemmodi' action="actionItemModification.jsp" method="POST">
+		<div class="NarrowTable">
+			<div class="SubMenuBar">
+				<button class="SubMenuButton" type="submit" id="changeBtn">confirm</button>
+				<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
+			</div>
+			Common Information
 			<table>
 				<thead>
-					<th style="width: 30%;">Metadata</th>
-					<th style="width: 70%;">Value</th>
+					<tr>
+						<th style="width: 30%;">Attribute</th>
+						<th style="width: 70%;">Value</th>
+					</tr>
 				</thead>
 				<tr>
 					<th>Item id</th>
-					<td><input type="text" class="inputText" id="id" name="id" value="<%=ic.getId()%>">
-					</td>
+					<td><input type="text" class="inputText" id="id" name="id" 
+						value="<%=ic.getId()%>" readonly /></td>
 				</tr>
 				<tr>
 					<th>Registration time</th>
-					<td><%=ic.getRegistration_time()%></td>
+					<td><input type="text" class="inputText" id="id" name="id" 
+						value="<%=ic.getRegistration_time()%>" readonly /></td>
 				</tr>
 				<tr>
 					<th>Model name</th>
@@ -88,7 +91,7 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 				</tr>
 			</table>
 	
-			<h2 style = "text-align: left;">Specific Metadata</h2>
+			<h2 style = "text-align: left;">Specific Information</h2>
 			<table>
 				<thead>
 					<th>No</th>
@@ -118,22 +121,17 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 			}
 			%>
 				<tbody id="AddOption">
-			    		
 			    </tbody>
 			</table>
 		</div>
-	
-<!--  <input type='hidden' name='jsonData2'> -->		
+		
 		<input type='hidden' name='isSize'>
-	
+		
 		<script type="text/javascript">
-			
 			var isSize = <%=is.size()+1%>			
 			is_index = isSize-1;
-			//yform6.isSize.value = isSize; 
 			
 		    $('#append_row').click(function(){ 
-		
 		        var contents = '<tr>';
 		        contents += '<td><input type = "text" class="inputText" placeholder="no' + (is_index+1)
 							+ '" name = "Dseq' + is_index + '"/></td>';
@@ -147,26 +145,19 @@ int item_id = Integer.parseInt(request.getParameter("id"));
 		        contents += '</tr>';
 		        
 		        is_index++;
-		        
 		        $('#AddOption').append(contents); 
-		       
 		    });
-		</script>
-	
-		<script type="text/javascript">
+		
 			function deleteRow(obj){
 				 $(obj).parent().parent().remove();
 			}
-	
-		</script>
-		
-		<script>
+
 			$("#changeBtn").click(function() {
-				itemmodifyform.isSize.value = is_index;
+				formitemmodi.isSize.value = is_index;
 			});
 		</script>
 	
 	</form>
-	</div>
+	</main>
 </body>
 </html>

@@ -1,9 +1,5 @@
-<%@page import="java.sql.*" pageEncoding="UTF-8" 
-import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
-<%@page import="java.io.*, java.util.*"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<!-- item detail 페이지에서  global, specific 삭제하는 페이지 -->
-		
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.sql.*, java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
 	int item_id = Integer.parseInt(request.getParameter("id"));
 	//System.out.println(send_id + " <-- delete this id ");
@@ -17,18 +13,9 @@ import="java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 	
 	dbm.disconnect();
 	System.out.println("item_id : " + item_id + " is deleted.");
+	
+	out.println("<script type='text/javascript'>");
+	out.println("	location.href='itemList.jsp?id=" + item_id + "';");
+	out.println("</script>");
 %>
 		
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-
-<script type="text/javascript">
-	alert("Item (<%= item_id %>) was deleted.");
-	window.location.replace("itemList.jsp?id=<%= item_id %>");
-</script>
-
-<title>delete m_delete.jsp</title>
-</head>
-
-</html>

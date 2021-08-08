@@ -1,14 +1,11 @@
-<%@page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*"%>
-<%@page import="java.io.*, java.util.*, structures.mysql.*, webmodules.mysql.*"%>
-<%//actionModification.jsp %>
-
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.sql.*, java.util.*, webmodules.mysql.*, structures.mysql.*" %>
 <%
-request.setCharacterEncoding("UTF-8");
+	request.setCharacterEncoding("UTF-8");
 	int id = Integer.parseInt(request.getParameter("id")); 
-	System.out.println(id);
+
 	DBManager dbm = new DBManager(application.getRealPath("/"));
+	
 	dbm.connect();
 	ItemCommon ic = new ItemCommon();
 	
@@ -18,11 +15,6 @@ request.setCharacterEncoding("UTF-8");
 	ic.setManufacturer(request.getParameter("manufacturer"));
 	ic.setCategory(request.getParameter("category"));
 	dbm.updateItemCommon(ic);
-	//dbm.disconnect();
-
-	Connection conn2 = null;
-	PreparedStatement pstmt2 = null;
-	request.setCharacterEncoding("UTF-8");
 
 	ArrayList<Integer> seqList = new ArrayList<Integer>();
 	ArrayList<String> groupList = new ArrayList<String>();
@@ -32,7 +24,7 @@ request.setCharacterEncoding("UTF-8");
 	String isSize = request.getParameter("isSize");
 	int size = Integer.valueOf(isSize);
 
-	System.out.println("size test = " + size);
+	//System.out.println("size test = " + size);
 	
 	for(int i = 0; i < size; i++) {
 		String mdseq = request.getParameter("Dseq" + i);
@@ -40,7 +32,7 @@ request.setCharacterEncoding("UTF-8");
 		String mdkey = request.getParameter("Dkey" + i);
 		String mdvalue =  request.getParameter("Dvalue" + i);
 
-		System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
+		//System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
 
 		int seq=0;
 
@@ -54,10 +46,10 @@ request.setCharacterEncoding("UTF-8");
 			groupList.add(mdgroup);
 			keyList.add(mdkey);
 			valueList.add(mdvalue);
-//			System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
-			System.out.print("  added");	
+			//System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
+			//System.out.print("  added");	
 		}
-		System.out.println();
+		//System.out.println();
 	}
 	
 	ArrayList<String> sortedGroup = new ArrayList<String>();
@@ -78,13 +70,13 @@ request.setCharacterEncoding("UTF-8");
 				}
 			}
 		}
-		System.out.print("index : " + (seq+1) + " | min : " + min + " | min seq index : " + minindex);
+		//System.out.print("index : " + (seq+1) + " | min : " + min + " | min seq index : " + minindex);
 		sortedGroup.add(groupList.get(minindex));
 		sortedKey.add(keyList.get(minindex));
 		sortedValue.add(valueList.get(minindex));
 		
-		System.out.println(" | seq : " + seqList.get(minindex) + " | group : " + groupList.get(minindex) 
-							+ " | key : " + keyList.get(minindex) + " | value : " + valueList.get(minindex));
+		//System.out.println(" | seq : " + seqList.get(minindex) + " | group : " + groupList.get(minindex) 
+		//					+ " | key : " + keyList.get(minindex) + " | value : " + valueList.get(minindex));
 		
 		seqList.remove(minindex);
 		groupList.remove(minindex);
@@ -95,22 +87,10 @@ request.setCharacterEncoding("UTF-8");
 	
 	dbm.deleteItemSpecific(id);
 	dbm.insertItemSpecific(id, sortedGroup, sortedKey, sortedValue);
-     
 	dbm.disconnect();
+	
+	
+	out.println("<script type='text/javascript'>");
+	out.println("	location.href='itemDetail.jsp?id=" + id + "';");
+	out.println("</script>");
 %>
-<html>
-<head>
-<script type="text/javascript">   
-		function goBack(){
-			window.history.back();
-		}
-		window.location.replace("itemDetail.jsp?id=<%=id%>");
-	</script>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Device metadata modification page</title>
-</head>
-<body>
-Device metadata modification page
-</body>
-</html>
-
