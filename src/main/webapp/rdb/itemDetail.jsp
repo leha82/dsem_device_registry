@@ -8,9 +8,12 @@
 	dbm.connect();
 	ItemCommon ic = dbm.getItemCommon(item_id);
 	ItemSpecific is = dbm.getItemSpecific(item_id);
+	ArrayList<DeviceInfo> dilist = dbm.getList_Device(item_id);
+	
 	dbm.disconnect();	
 
 	request.setAttribute("itemspecific", is);
+	request.setAttribute("ref_devices", dilist);
 %>
     
 <!DOCTYPE html>
@@ -24,6 +27,12 @@
 		}
 		
 		function confirmDelete() {
+			var dilist_size = <%= dilist.size() %>;
+			if (dilist_size > 0) {
+				alert('Cannot Delete this item. It is referenced by some devices. Modify or delete the devices first.');
+				return false;
+			}
+			
 			if (confirm('Delete Item <%=ic.getModel_name()%> ?')) {
 				location.href='actionDeleteItem.jsp?id=<%=ic.getId()%>';
 			}
@@ -80,6 +89,8 @@
 			</table>
 			<br><br>
 			<jsp:include page="partSpecificDetail.jsp" flush="false" />
+			<br><br>
+			<jsp:include page="partItemReference.jsp" flush="false" />
 			<div class="SubMenuBar">
 				<button class="SubMenuButton" type="button" onclick="confirmDelete();">delete item</button>
 			</div>

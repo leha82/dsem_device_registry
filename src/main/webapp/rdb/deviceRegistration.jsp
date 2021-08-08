@@ -1,4 +1,13 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page import="java.util.*, webmodules.mysql.*, structures.mysql.*"%>
+<%
+	DBManager dbm = new DBManager(application.getRealPath("/"));
+
+	dbm.connect();
+	ArrayList<ItemCommon> iclist = dbm.getList_ItemCommon();
+	dbm.disconnect();
+%>
+
 
 <!DOCTYPE html>
 <html>
@@ -12,7 +21,19 @@
 		}
 	    
 		function check() {
-			if (myform.item_id.value == "" || myform.deployment_time.value == ""
+			if (devform.lat.value!="" && isNaN(devform.lat.value)) {
+				alert("Input numeric value in latitude");
+				devform.lat.focus();
+				return false;
+			}
+
+			if (devform.lon.value!="" && isNaN(devform.lon.value)) {
+				alert("Input numeric value in latitude");
+				devform.lon.focus();
+				return false;
+			}
+			
+/* 			if (myform.item_id.value == "" || myform.deployment_time.value == ""
 					|| myform.lat.value == "" ) {
 				alert("Input values");
 	
@@ -22,8 +43,9 @@
 		
 				return false;
 			}
-			
-			document.myform.submit();
+*/
+
+			devform.submit();
 		}
 	</script>
 	
@@ -38,7 +60,7 @@
 		<div class="SubTitleBar">
 			<h1>Register New Device</h1>
 		</div>
-		<form name='myform' action="actionDeviceRegistration.jsp" method="post">
+		<form name='devform' action="actionDeviceRegistration.jsp" method="post">
 		<div class="NarrowTable">
 			<div class="SubMenuBar">
 				<button class="SubMenuButton" type="button" onclick="check()">submit</button>
@@ -46,46 +68,62 @@
 			</div>
 			<table>
 				<thead>
+					<tr>
 						<th style="width: 30%;">Attribute</th>
 						<th style="width: 70%;">Value</th>
+					</tr>
 				</thead>
-				<tr>
-					<th>Device name</th>
-					<td><input type="text" class="inputText" name="device_name" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>Item id</th>
-					<td><input type="text" class="inputText" name="item_id" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>System id</th>
-					<td><input type="text" class="inputText" name="system_id" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>Deployment time</th>
-					<td><input type="text" class="inputText" name="deployment_time" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>Deployment location</th>
-					<td><input type="text" class="inputText" name="deployment_location" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>Latitude</th>
-					<td><input type="text" class="inputText" name="lat" placeholder="Input" /></td>
-				</tr>
-				
-				<tr>
-					<th>Longitude</th>
-					<td><input type="text" class="inputText" name="lon" placeholder="Input" /></td>
-				</tr>
+				<tbody>
+					<tr>
+						<th>Device name</th>
+						<td><input type="text" class="inputText" name="device_name" placeholder="Input" /></td>
+					</tr>
+					
+					<tr>
+						<th>System id</th>
+						<td><input type="text" class="inputText" name="system_id" placeholder="Input" /></td>
+					</tr>
+					
+					<tr>
+						<th>Item id</th>
+						<td>
+							<select class="inputText" name="item_id">
+<%
+	for (int i=0; i<iclist.size(); i++) {
+		ItemCommon ic = iclist.get(i);
+%>
+								<option value="<%= ic.getId() %>">(<%= ic.getId() %>)<%= ic.getModel_name() %></option>
+<%		
+	}
+%>						
+							</select>
+						</td>
+					</tr>
+					
+					<tr>
+						<th>Deployment time</th>
+						<td><input type="text" class="inputText" name="deployment_time" placeholder="yyyy-MM-dd HH:mm:ss"
+							value="<%= CoreModules.getCurrentTime() %>" /></td>
+					</tr>
+					
+					<tr>
+						<th>Deployment location</th>
+						<td><input type="text" class="inputText" name="deployment_location" placeholder="Input" /></td>
+					</tr>
+					
+					<tr>
+						<th>Latitude</th>
+						<td><input type="text" class="inputText" name="lat" placeholder="Input GPS position" /></td>
+					</tr>
+					
+					<tr>
+						<th>Longitude</th>
+						<td><input type="text" class="inputText" name="lon" placeholder="Input GPS position" /></td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 	</form>
-	</div>
+	</main>
 </body>
 </html>

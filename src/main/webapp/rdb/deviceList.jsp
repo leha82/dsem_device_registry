@@ -53,9 +53,12 @@
 <%
 	for(int i=0; i<diList.size(); i++) {
 		DeviceInfo di = diList.get(i);
-		if (di.getLatitude().length()>10) di.setLatitude(di.getLatitude().substring(0, 10));
-		if (di.getLongitude().length()>10) di.setLongitude(di.getLongitude().substring(0, 10));
+		
+		String lat = di.getLatitudeString();
+		if (lat.length()>10) lat = lat.substring(0, 10);
 
+		String lon = di.getLongitudeString();
+		if (lon.length()>10) lon = lon.substring(0, 10);
 %>
 					<tr>
 						<td><%=di.getDevice_id()%></td>
@@ -66,8 +69,8 @@
 						<td><a href="itemDetail.jsp?id=<%=di.getItem_id()%>"><%=di.getItem_name()%></a></td>
 						<td><%=di.getDeployment_time()%></td>
 						<td><%=di.getDeployment_location()%></td>
-						<td><%=di.getLatitude()%></td>
-						<td><%=di.getLongitude()%></td>
+						<td><%=lat%></td>
+						<td><%=lon%></td>
 						<td>
 							<button type="button" 
 								onclick="location.href='deviceDetail.jsp?id=<%=di.getDevice_id()%>'">detail</button>

@@ -6,6 +6,7 @@
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();
 	DeviceInfo di = dbm.getDeviceInfo(device_id);
+	ArrayList<ItemCommon> iclist = dbm.getList_ItemCommon();
 	dbm.disconnect();	
 %>
 
@@ -68,14 +69,24 @@
 					</tr>
 					<tr>
 						<th>Item id</th>
-						<td><input type="text" class="inputText" name="item_id" 
-								value="<%=di.getItem_id()%>"></td>
-					</tr>
-					<tr>
-						<th>Item model</th>
-						<td><input type="text" class="inputText" name="item_name" 
-								value="<%=di.getItem_name()%>" readonly />
-					</tr>
+						<td>
+							<select class="inputText" name="item_id">
+<%
+	for (int i=0; i<iclist.size(); i++) {
+		ItemCommon ic = iclist.get(i);
+		String selected = "";
+		if (di.getItem_id() == ic.getId()) 
+			selected = "selected";
+%>
+								<option value="<%= ic.getId() %>" <%= selected %>>
+									(<%= ic.getId() %>)<%= ic.getModel_name() %>
+								</option>
+<%		
+	}
+%>						
+							</select>
+						</td>
+					</tr>	
 					<tr>
 						<th>Deployment time</th>
 						<td><input type="text" class="inputText" name="deployment_time" 

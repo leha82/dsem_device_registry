@@ -4,64 +4,46 @@ import java.sql.*;
 import java.util.*;
 import structures.mysql.*;
 import java.io.*;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 
 public class DBManager {
-	public String configFilename = "config.json";
+	private String dbDriverClass = "com.mysql.cj.jdbc.Driver";
+	private String jdbcDriver; 
 
-	public String dbDriverClass = "com.mysql.cj.jdbc.Driver";
-	public String jdbcDriver; 
-
-	public String dbIP;
-	public int dbPort;
-	public String dbID;
-	public String dbPW;
-	public String dbnameRegistry;
-	public String dbnameMeasurement;
-	public String tblCommon;
-	public String tblSpecific;
-	public String tblDevice;
-	public String mdSensor;
-	public String mdActuator;
+	private String dbIP;
+	private int dbPort;
+	private String dbID;
+	private String dbPW;
+	private String dbnameRegistry;
+	private String dbnameMeasurement;
+	private String tblCommon;
+	private String tblSpecific;
+	private String tblDevice;
+	private String mdSensor;
+	private String mdActuator;
 	
-	public Connection conn;
+	private Connection conn;
+	private CoreModules cm;
 	
 	public DBManager(String configPath) {
-		String filename = configPath + configFilename;
-//		System.out.println(filename);
-		setConfig(filename);
+		cm = new CoreModules();
+		cm.loadConfigJson(configPath);
+
+		dbIP = cm.getDbIP();
+		dbPort = cm.getDbPort();
+		dbID = cm.getDbID();
+		dbPW = cm.getDbPW();
+		dbnameRegistry = cm.getDbnameRegistry();
+		dbnameMeasurement = cm.getDbnameMeasurement();
+		tblCommon = cm.getTblCommon();
+		tblSpecific = cm.getTblSpecific();
+		tblDevice = cm.getTblDevice();
+		mdSensor = cm.getMdSensor();
+		mdActuator = cm.getMdActuator();
 		
-		conn = null;
 		jdbcDriver = "jdbc:mysql://" + dbIP + ":" + dbPort + "/" 
 				+ dbnameRegistry + "?useUnicode=true&characterEncoding=utf8";
-		
 	}
 
-	public void setConfig(String configfile) {
-	    JSONParser parser = new JSONParser();
-		JSONObject jsonObject; 
-	    
-		try {
-			jsonObject = (JSONObject) parser.parse(new FileReader(configfile));
-			
-			dbIP = (String) jsonObject.get("DB_IP");
-			dbPort = Integer.parseInt((String)jsonObject.get("DB_PORT"));
-			dbID = (String) jsonObject.get("DB_ID");
-			dbPW = (String) jsonObject.get("DB_PW");
-			dbnameRegistry = (String) jsonObject.get("DBN_DEVICE_REGISTRY");
-			dbnameMeasurement = (String) jsonObject.get("DBN_DEVICE_MEASUREMENT");
-			tblCommon = (String) jsonObject.get("TABLE_COMMON");
-			tblSpecific = (String) jsonObject.get("TABLE_SPECIFIC");
-			tblDevice = (String) jsonObject.get("TABLE_DEVICE");
-			mdSensor = (String) jsonObject.get("METADATA_SENSOR");
-			mdActuator = (String) jsonObject.get("METADATA_ACTUATOR");
-			
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
 	
 	public boolean connect() {
 		try {
@@ -88,24 +70,26 @@ public class DBManager {
 	}
 	
 	
-	// About Global metadata
+	// About Item Common
 	public void insertItemCommon(ItemCommon ic) {
 		try {
 			String sql = "INSERT INTO " + tblCommon 
 						+ " (item_id, model_name, registration_time, device_type, manufacturer, category)"
-						+ " VALUES (?,?,now(),?,?,?)";
+						+ " VALUES (?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setInt(1, ic.getId());
 			pstmt.setString(2, ic.getModel_name());
-			pstmt.setString(3, ic.getDevice_type());
-			pstmt.setString(4, ic.getManufacturer());
-			pstmt.setString(5, ic.getCategory());
+			pstmt.setString(3, ic.getRegistration_time());
+			pstmt.setString(4, ic.getDevice_type());
+			pstmt.setString(5, ic.getManufacturer());
+			pstmt.setString(6, ic.getCategory());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in insertItemCommon()");
 		}
 	}
 	
@@ -135,6 +119,7 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getList_ItemCommon()");
 		}
 		
 		return iclist;
@@ -164,6 +149,7 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getItemCommon()");
 		}
 		
 		return ic;
@@ -184,6 +170,7 @@ public class DBManager {
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in updateItemCommon()");
 		}
 	}
 	
@@ -196,7 +183,8 @@ public class DBManager {
 			pstmt.executeUpdate();
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in deleteItemCommon()");
 		}
 	}
 	
@@ -225,6 +213,7 @@ public class DBManager {
 		     }
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in insertItemSpecific()");
 		}
 	}
 		
@@ -253,6 +242,7 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getItemSpecific()");
 		}
 		
 		return is;
@@ -270,7 +260,8 @@ public class DBManager {
 			pstmt.executeUpdate();
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in deleteItemSpecific()");
 		}
 	}
 	
@@ -309,10 +300,50 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getList_Device()");
 		}
 		
 		return dlist;
 	}
+	
+	public ArrayList<DeviceInfo> getList_Device(int item_id) {
+		ArrayList<DeviceInfo> dlist = new ArrayList<DeviceInfo>(); 
+		try {
+			ResultSet rs = null;
+	
+			String sql = "SELECT device_id, device_name, system_id, table_name, "
+					+ "item_id, deployment_time, deployment_location, latitude, longitude "
+					+ "FROM " + tblDevice + " " 
+					+ "WHERE item_id = " + item_id;
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+//			System.out.println("Get Device List : ");
+			while (rs.next()) {
+				DeviceInfo di = new DeviceInfo();
+				di.setDevice_id(rs.getInt(1));
+				di.setDevice_name(rs.getString(2));
+				di.setSystem_id(rs.getString(3));
+				di.setTable_name(rs.getString(4));
+				di.setItem_id(rs.getInt(5));
+				di.setDeployment_time(rs.getString(6));
+				di.setDeployment_location(rs.getString(7));
+				di.setLatitude(rs.getString(8));
+				di.setLongitude(rs.getString(9));
+//				System.out.println(di.toString());
+				
+				dlist.add(di);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getList_Device(int item_id)");
+		}
+		
+		return dlist;
+	}
+
 	
 	public DeviceInfo getDeviceInfo(int device_id){
 		DeviceInfo di = new DeviceInfo(); 
@@ -342,6 +373,7 @@ public class DBManager {
 			stmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getDeviceInfo()");
 		}
 		
 		return di;
@@ -350,27 +382,33 @@ public class DBManager {
 	public boolean insertDeviceInfo(DeviceInfo di) {
 		try {
 			String sql = "INSERT INTO " + tblDevice 
-						+ " (item_id, system_id, device_name, table_name, deployment_time,"
+						+ " (device_name, system_id, table_name, item_id, deployment_time,"
 						+ " deployment_location, latitude, longitude)"
 						+ " VALUES (?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
-			pstmt.setInt(1, di.getItem_id());
+			pstmt.setString(1, di.getDevice_name());
 			pstmt.setString(2, di.getSystem_id());
-			pstmt.setString(3, di.getDevice_name());
-			pstmt.setString(4, di.getTable_name());
+			pstmt.setString(3, di.getTable_name());
+			pstmt.setInt(4, di.getItem_id());
 			pstmt.setString(5, di.getDeployment_time());
 			pstmt.setString(6, di.getDeployment_location());
-			pstmt.setString(7, di.getLatitude());
-			pstmt.setString(8, di.getLongitude());
-
+			
+			if (di.getLatitude()!=null) 
+				pstmt.setDouble(7, di.getLatitude());
+			else 
+				pstmt.setNull(7, Types.NULL);
+			
+			if (di.getLongitude()!= null) 
+				pstmt.setDouble(8, di.getLongitude());
+			else 
+				pstmt.setNull(8, Types.NULL);
+			
 			pstmt.executeUpdate();
-
-//			System.out.println("----------------------------------->>> Device Registration Success");
 		} catch (Exception e) {
-			e.printStackTrace();
-//			System.out.println("----------------------------------->>> Device Registration Failure");
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in insertDeviceInfo()");
 			return false;
 		}
 		return true;
@@ -379,22 +417,36 @@ public class DBManager {
 	public void updateDeviceInfo(DeviceInfo di) {
 		try {
 			String sql = "UPDATE " + tblDevice 
-						+ " SET item_id=?, system_id=?, device_name=?, deployment_time=?, "
+						+ " SET device_name=?, system_id=?, item_id=?, deployment_time=?, "
 						+ "deployment_location=?, latitude=?, longitude=?"
 						+ " WHERE device_id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
-			pstmt.setInt(1, di.getItem_id());
+			pstmt.setString(1, di.getDevice_name());
 			pstmt.setString(2, di.getSystem_id());
-			pstmt.setString(3, di.getDevice_name());
+			pstmt.setInt(3, di.getItem_id());
 			pstmt.setString(4, di.getDeployment_time());
 			pstmt.setString(5, di.getDeployment_location());
-			pstmt.setString(6, di.getLatitude());
-			pstmt.setString(7, di.getLongitude());
+
+//			pstmt.setDouble(6, di.getLatitude());
+//			pstmt.setDouble(7, di.getLongitude());
+
+			if (di.getLatitude()!=null) 
+				pstmt.setDouble(6, di.getLatitude());
+			else 
+				pstmt.setNull(6, Types.NULL);
+			
+			if (di.getLongitude()!= null) 
+				pstmt.setDouble(7, di.getLongitude());
+			else 
+				pstmt.setNull(7, Types.NULL);
+			
+			
 			pstmt.setInt(8, di.getDevice_id());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in updateDeviceInfo()");
 		}
 	}	
 	
@@ -410,6 +462,7 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in deleteDeviceInfo()");
 		}
 	}
 	
@@ -431,6 +484,8 @@ public class DBManager {
 			pstmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("Error is occured in updateDeviceTableName()");
+
 		}
 		return device_id;
 	}
@@ -445,15 +500,15 @@ public class DBManager {
 			pstmt.setString(1, table_name);
 			pstmt.setInt(2, device_id);
 			
-			System.out.println(pstmt.toString());
+//			System.out.println(pstmt.toString());
 			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			System.out.println("update error");
+			System.out.println("Error is occured in updateDeviceTableName()");
 			return false;
 		}
-		System.out.println("update success");
+//		System.out.println("update success");
 		return true;
 	}
 		
@@ -501,7 +556,7 @@ public class DBManager {
 		}
 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 			System.out.println("Error is occured in createTable_DeviceMeasurement()");
 			return false;
 		}
@@ -519,9 +574,9 @@ public class DBManager {
 //			System.out.println(table_name + " Table delete");
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in deleteTableDeviceMeasurement()");
 		}
 	}
-	
 	
 }

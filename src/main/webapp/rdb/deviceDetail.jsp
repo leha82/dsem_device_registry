@@ -94,11 +94,11 @@
 				</tr>
 				<tr>
 					<th>Latitude</th>
-					<td><%=di.getLatitude()%></td>
+					<td><%= di.getLatitudeString()%></td>
 				</tr>
 				<tr>
 					<th>Longitude</th>
-					<td><%=di.getLongitude()%></td>
+					<td><%= di.getLongitudeString()%></td>
 				</tr>
 			</table>
 			<br><br>

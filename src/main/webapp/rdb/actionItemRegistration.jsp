@@ -10,7 +10,7 @@
 	//Timestamp now_timestamp = new Timestamp(System.currentTimeMillis());
 	
 	ic.setModel_name(request.getParameter("model_name"));
-//	ic.setRegistration_time(now_timestamp);
+	ic.setRegistration_time(CoreModules.getCurrentTime());
 	ic.setDevice_type(request.getParameter("device_type"));
 	ic.setManufacturer(request.getParameter("manufacturer"));
 	ic.setCategory(request.getParameter("category"));

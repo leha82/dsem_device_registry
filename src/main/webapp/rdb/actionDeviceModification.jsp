@@ -20,8 +20,7 @@
 	
 	dbm.updateDeviceInfo(di);
 	dbm.disconnect();
-	
 	out.println("<script type='text/javascript'>");
-	out.println("	location.href='deviceList.jsp';");
+	out.println("	location.href='deviceDetail.jsp?id=" + device_id + "';");
 	out.println("</script>");
 %>
