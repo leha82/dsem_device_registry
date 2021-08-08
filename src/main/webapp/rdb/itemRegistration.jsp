@@ -42,25 +42,29 @@
 			</div>
 			<table>
 				<thead>
-					<th style="width: 30%;">Metadata</th>
-					<th style="width: 70%;">Value</th>
+					<tr>
+						<th style="width: 30%;">Metadata</th>
+						<th style="width: 70%;">Value</th>
+					</tr>
 				</thead>
-				<tr>
-					<th>Model name</th>
-					<td><input type="text" class="inputText" name="model_name" placeholder="input" /></td>
-				</tr>
-				<tr>
-					<th>Device type</th>
-					<td><input type="text" class="inputText" name="device_type" placeholder="input" /></td>
-				</tr>
-				<tr>
-					<th>Manufacturer</th>
-					<td><input type="text" class="inputText" name="manufacturer" placeholder="input" /></td>
-				</tr>
-				<tr>
-					<th>Category</th>
-					<td><input type="text" class="inputText" name="category" placeholder="input" /></td>
-				</tr>
+				<tbody>
+					<tr>
+						<th>Model name</th>
+						<td><input type="text" class="inputText" name="model_name" placeholder="input" /></td>
+					</tr>
+					<tr>
+						<th>Device type</th>
+						<td><input type="text" class="inputText" name="device_type" placeholder="input" /></td>
+					</tr>
+					<tr>
+						<th>Manufacturer</th>
+						<td><input type="text" class="inputText" name="manufacturer" placeholder="input" /></td>
+					</tr>
+					<tr>
+						<th>Category</th>
+						<td><input type="text" class="inputText" name="category" placeholder="input" /></td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 		</form>

@@ -51,18 +51,25 @@ body {
 
 header {
 	font-size: 40px; font-weight: bold; text-decoration: none;
+	text-align: center;
+}
+
+.MainTop {
+	border: 1px solid black;
+	padding: 15px 0px 0px 0px ; /* top right down left */
+	background: #E4BBFE; color:black; 
 }
 
 .ItemTop {
 	border: 1px solid black;
 	padding: 15px 0px 0px 0px ; /* top right down left */
-	text-align: center;	background: orange; color:black; 
+	background: orange; color:black; 
 }
 
 .DeviceTop {
 	border: 1px solid black;
 	padding: 15px 0px 0px 0px ; /* top right down left */
-	text-align: center;	background: blue; color:white; 
+	background: blue; color:white; 
 }
 
 .MenuButton {
@@ -76,23 +83,20 @@ main {
 	margin-top: 15px;
 	text-align: center;
 }
-
+/*
 .SubTitleBar {
-	/*font-size: 15px; font-weight: bold; text-decoration: none;*/
 }
-
+*/
 .SubMenuBar {
 /*	border: 1px solid black;*/
 	margin: 0px; 
 	padding: 0px 0px 5px 0px ; /* top right down left */
 	text-align: right;
 }
-
+/*
 .SubMenuButton {
-/*	margin:15px;
-	float: right;*/
 }
-
+*/
 .WideTable{	
 	text-align:left;
 	font-size: 25px; font-weight: bold;
