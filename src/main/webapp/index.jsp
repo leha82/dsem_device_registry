@@ -10,8 +10,8 @@
 	<header class="MainTop">
 		DSEM Device Registry<br>
 		<button class="MenuButton" type="button" onclick="location.href='index.jsp'">Main</button>
-		<button class="MenuButton" type="button" onclick="location.href='rdb/itemList.jsp'">Item</button>
-		<button class="MenuButton" type="button" onclick="location.href='rdb/deviceList.jsp'">Device</button>
+		<button class="MenuButton" type="button" onclick="location.href='pages/itemList.jsp'">Item</button>
+		<button class="MenuButton" type="button" onclick="location.href='pages/deviceList.jsp'">Device</button>
 	</header>
 	<main>
 		<div class="SubTitleBar">
