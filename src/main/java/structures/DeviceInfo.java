@@ -3,7 +3,7 @@ package structures;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import webmodules.CoreModules;
+import core.CoreModules;
 
 public class DeviceInfo {
 	private int device_id;
@@ -16,21 +16,22 @@ public class DeviceInfo {
 	private String deployment_location;
 	private Double latitude;
 	private Double longitude;
+	private boolean enabled;
 
 	public DeviceInfo() {
-		this(0, "", "", "", 0, "", "", "", null, null);
+		this(0, "", "", "", 0, "", "", "", null, null, true);
 	}
 
 	public DeviceInfo(int device_id, String device_name, String system_id, String table_name,
 			int item_id, String deployment_time, String deployment_location, 
 			Double latitude, Double longitude) {
 		this(device_id, device_name, system_id, table_name, item_id, "", deployment_time, 
-				deployment_location, latitude, longitude);
+				deployment_location, latitude, longitude, true);
 	}
 	
 	public DeviceInfo(int device_id, String device_name, String system_id,  String table_name, 
 			int item_id, String item_name, String deployment_time, String deployment_location, 
-			Double latitude, Double longitude) {
+			Double latitude, Double longitude, boolean enabled) {
 		this.device_id = device_id;
 		this.item_id = item_id;
 		this.system_id = system_id;
@@ -41,6 +42,7 @@ public class DeviceInfo {
 		this.deployment_location = deployment_location;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.enabled = enabled;
 	}
 
 	public int getDevice_id() {
@@ -161,6 +163,26 @@ public class DeviceInfo {
 		if (longitude != null ) 
 			lon = String.valueOf(longitude);
 		return lon;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public int getEnabled() {
+		if (this.enabled) return 1;
+		return 0;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public void setEnabled(int enabled) {
+		if (enabled == 1)
+			this.enabled = true;
+		else 
+			this.enabled = false;
 	}
 
 	public String toString() {

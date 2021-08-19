@@ -1,12 +1,4 @@
 @charset "UTF-8";
-a, a:link, a:visited {
-	text-decoration-line:none;
-	color: black;
-}
-
-a:hover {
-	color:blue; 
-}
 
 h1 {
 	font-size:30px; 	
@@ -113,6 +105,17 @@ main {
 	width: 95%;
 	text-align: center;
 }
+
+.Disabled {
+	background: #F0F0F0; 	
+	color: red;
+}
+
+.Clickable:hover {
+	cursor:pointer;
+	background:#EEEEFF;
+}
+
 
 #append_row {
 	float: center;

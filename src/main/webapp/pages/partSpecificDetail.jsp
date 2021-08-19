@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, webmodules.*, structures.*" %>
+    pageEncoding="UTF-8" import="java.util.*,core.*, structures.*" %>
 
 <%
 	ItemSpecific is = (ItemSpecific) request.getAttribute("itemspecific");

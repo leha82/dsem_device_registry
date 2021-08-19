@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, webmodules.*, structures.*"%>
+<%@page import="java.util.*,core.*, structures.*"%>
 <%
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 
@@ -54,7 +54,7 @@
 						<td><%= ic.getManufacturer() %></td>
 						<td><%= ic.getCategory()%></td>
 						<td><button type="button"
-								onclick="location.href='itemDetail.jsp?id=<%=ic.getId()%>'">detail</button></td>
+								onclick="location.href='itemDetail.jsp?item_id=<%=ic.getId()%>'">detail</button></td>
 					</tr>
 	
 <%

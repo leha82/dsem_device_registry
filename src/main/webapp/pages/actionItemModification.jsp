@@ -1,15 +1,16 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.sql.*, java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.sql.*, java.util.*, core.*, structures.*" %>
 <%
 	request.setCharacterEncoding("UTF-8");
-	int id = Integer.parseInt(request.getParameter("id")); 
+	int item_id = Integer.parseInt(request.getParameter("item_id")); 
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
+//	System.out.println("modified action : " + item_id);
 	
 	dbm.connect();
 	ItemCommon ic = new ItemCommon();
 	
-	ic.setId(id);
+	ic.setId(item_id);
 	ic.setModel_name(request.getParameter("model_name"));
 	ic.setDevice_type(request.getParameter("device_type"));
 	ic.setManufacturer(request.getParameter("manufacturer"));
@@ -22,10 +23,10 @@
 	ArrayList<String> valueList = new ArrayList<String>();
 	
 	String isSize = request.getParameter("isSize");
+//	System.out.println("isSize : "+ isSize);
+	
 	int size = Integer.valueOf(isSize);
 
-	//System.out.println("size test = " + size);
-	
 	for(int i = 0; i < size; i++) {
 		String mdseq = request.getParameter("Dseq" + i);
 		String mdgroup = request.getParameter("Dgroup" + i);
@@ -46,10 +47,7 @@
 			groupList.add(mdgroup);
 			keyList.add(mdkey);
 			valueList.add(mdvalue);
-			//System.out.print(i + " - seq: " + mdseq + " | group : " + mdgroup + " | key : " + mdkey + " |  value : " + mdvalue);
-			//System.out.print("  added");	
 		}
-		//System.out.println();
 	}
 	
 	ArrayList<String> sortedGroup = new ArrayList<String>();
@@ -70,13 +68,9 @@
 				}
 			}
 		}
-		//System.out.print("index : " + (seq+1) + " | min : " + min + " | min seq index : " + minindex);
 		sortedGroup.add(groupList.get(minindex));
 		sortedKey.add(keyList.get(minindex));
 		sortedValue.add(valueList.get(minindex));
-		
-		//System.out.println(" | seq : " + seqList.get(minindex) + " | group : " + groupList.get(minindex) 
-		//					+ " | key : " + keyList.get(minindex) + " | value : " + valueList.get(minindex));
 		
 		seqList.remove(minindex);
 		groupList.remove(minindex);
@@ -85,12 +79,61 @@
 		seq++;
 	}
 	
-	dbm.deleteItemSpecific(id);
-	dbm.insertItemSpecific(id, sortedGroup, sortedKey, sortedValue);
+	
+	// check the specific information and it affects measurement table.
+	ArrayList<String> originlist = dbm.getDBModuleList(ic.getId());
+	ArrayList<String> inputlist = dbm.getInputModuleList(sortedKey, sortedValue); 
+	
+//	System.out.print("original sensor and actuator : ");
+//	for (int i=0; i<originlist.size(); i++) 
+//		System.out.print(originlist.get(i) + " ");
+//	System.out.println();
+
+//	System.out.print("input sensor and actuator : ");
+//	for (int i=0; i<inputlist.size(); i++) 
+//		System.out.print(inputlist.get(i) + " ");
+//	System.out.println();
+
+	// change specific information of item	
+	dbm.deleteItemSpecific(ic.getId());
+	dbm.insertItemSpecific(ic.getId(), sortedGroup, sortedKey, sortedValue);
+	
+	// Treat measurement tables of referred devices
+	if (!CoreModules.isKeyListSame(originlist, inputlist)) {
+		System.out.println("the key list is not same.");
+		ArrayList<DeviceInfo> dilist = dbm.getList_Device(ic.getId());
+		
+//		ArrayList<DeviceInfo> disabledList = new ArrayList<DeviceInfo>();
+		for (int i=0; i<dilist.size(); i++) {
+			DeviceInfo di = dilist.get(i);
+			System.out.print("device " + di.getDevice_id() + " : " + di.getTable_name() + " ... ");
+			
+			// if measurement table of each device has sensing data, the device set to be disabled.
+			// otherwise, if the table is empty, measurement table is re-created.
+			if (dbm.getCount_DeviceMeasurement(di.getTable_name())>0 && di.isEnabled()) {
+				System.out.print("disabled.");
+				dbm.updateDeviceEnabled(di.getDevice_id(), false);
+			} else {
+				dbm.deleteTableDeviceMeasurement(di.getTable_name());
+				System.out.print("deleted. ");
+				
+				if (dbm.createTable_DeviceMeasurement(di.getItem_id(), di.getTable_name())) {
+					System.out.print("And table is recreated.");
+				} else {
+					System.out.println("Table " + di.getTable_name() + " cannot be re-created.");
+					System.out.print("device " + di.getDevice_id() + " is disabled.");
+//					dbm.updateDeviceTableName(di.getDevice_id(), "");
+					dbm.updateDeviceEnabled(di.getDevice_id(), false);
+				}
+			}
+				
+			System.out.println();
+		}
+	}
+
 	dbm.disconnect();
 	
-	
 	out.println("<script type='text/javascript'>");
-	out.println("	location.href='itemDetail.jsp?id=" + id + "';");
+	out.println("	location.href='itemDetail.jsp?item_id=" + ic.getId() + "';");
 	out.println("</script>");
 %>

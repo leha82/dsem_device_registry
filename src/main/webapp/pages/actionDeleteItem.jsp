@@ -1,9 +1,9 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.sql.*, java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.sql.*, java.util.*, core.*, structures.*" %>
 <%
 	request.setCharacterEncoding("utf-8");
 	
-	int item_id = Integer.parseInt(request.getParameter("id"));
+	int item_id = Integer.parseInt(request.getParameter("item_id"));
 	
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();

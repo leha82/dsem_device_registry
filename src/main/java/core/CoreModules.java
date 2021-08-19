@@ -1,4 +1,4 @@
-package webmodules;
+package core;
 
 import java.text.SimpleDateFormat;
 import java.io.*;
@@ -35,6 +35,26 @@ public class CoreModules {
 		} catch (Exception e) {
 			return false;
 		}
+		return true;
+	}
+	
+	public static boolean isKeyListSame(ArrayList<String> listA, ArrayList<String> listB) {
+		listA.sort(Comparator.naturalOrder());
+		listB.sort(Comparator.naturalOrder());
+		
+//		System.out.println("issame size : " + listA.size() + " , " + listB.size());
+		
+		if (listA.size() != listB.size()) return false;
+		
+		for (int i=0; i<listA.size(); i++) {
+			String a = listA.get(i);
+			String b = listB.get(i);
+
+//			System.out.println(i + " : " + a + " , " + b);
+			
+			if (!a.equals(b)) return false;
+		}
+		
 		return true;
 	}
 	

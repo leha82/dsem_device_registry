@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.sql.*, java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.sql.*, java.util.*, core.*, structures.*" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	DBManager dbm = new DBManager(application.getRealPath("/"));
@@ -33,13 +33,14 @@
 		//table_name is defined as "device + 0000 + {device_id}
 		String tableno = "0000" + device_id;
 		String table_name = "device" + tableno.substring(tableno.length() - 4);
-
+		di.setTable_name(table_name);
+		
 		// table is automatically created in DeviceMeasurement database
 		
 		message = "Device (" + di.getDevice_name() + ") is registered.";
 		
-		if (dbm.createTable_DeviceMeasurement(di.getItem_id(), table_name)) {
-			dbm.updateDeviceTableName(device_id, table_name);
+		if (dbm.createTable_DeviceMeasurement(di.getItem_id(), di.getTable_name())) {
+			dbm.updateDeviceTableName(di.getDevice_id(), di.getTable_name());
 		} else {
 			message += " But the device measurement table is not created.";
 		}

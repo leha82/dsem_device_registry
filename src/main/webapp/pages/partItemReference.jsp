@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*, webmodules.*, structures.*" %>
+    pageEncoding="UTF-8" import="java.util.*,core.*, structures.*" %>
 
 <%
 //	int item_id = Integer.parseInt(request.getParameter("id"));
@@ -24,20 +24,24 @@
 		<thead>
 			<tr>
 				<th style="width:20%;">Device ID</th>
-				<th style="width:80%;">Device Name</th>
+				<th style="width:60%;">Device Name</th>
+				<th style="width:20%;">Status</th>
 			</tr>
 		</thead>
 		<tbody>
 <%
 	if (dilist.size()==0) {
-		out.write("<tr><td colspan=2>no devices</td></tr>");
+		out.write("<tr><td colspan=3>no devices</td></tr>");
 	}
 	for(int i = 0; i < dilist.size(); i++) {
 		DeviceInfo di = dilist.get(i);
+		String disabled = "";
+		if (!di.isEnabled()) disabled="Disabled";
 %>
-			<tr>
+			<tr class="Clickable <%= disabled %>" onclick="location.href='deviceDetail.jsp?device_id=<%=di.getDevice_id()%>'">
 				<td><%=di.getDevice_id()%></td>
 				<td><%=di.getDevice_name()%></td>
+				<td><%= (di.isEnabled())?"enabled":"disabled" %></td>
 			</tr>
 <%
 	}

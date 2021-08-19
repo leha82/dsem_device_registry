@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, webmodules.*, structures.*"%>
+<%@page import="java.util.*,core.*, structures.*"%>
 <%
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 
@@ -39,13 +39,11 @@
 						<th>Device id</th>
 						<th>Device name</th>
 						<th>System id</th>
-						<th>Table name</th>
 						<th>Item id</th>
 						<th>Item Model</th>
 						<th>Deployment time</th>
 						<th>Deployment location</th>
-						<th>Latitude</th>
-						<th>Longitude</th>
+						<th>Status</th>
 						<th>Detail</th>
 					</tr>
 				</thead>
@@ -53,27 +51,21 @@
 <%
 	for(int i=0; i<diList.size(); i++) {
 		DeviceInfo di = diList.get(i);
-		
-		String lat = di.getLatitudeString();
-		if (lat.length()>10) lat = lat.substring(0, 10);
-
-		String lon = di.getLongitudeString();
-		if (lon.length()>10) lon = lon.substring(0, 10);
+		String disabled = "";
+		if (!di.isEnabled()) disabled="class='Disabled'";
 %>
-					<tr>
+					<tr <%= disabled %>>
 						<td><%=di.getDevice_id()%></td>
 						<td><%=di.getDevice_name()%></td>
 						<td><%=di.getSystem_id()%></td>
-						<td><%=di.getTable_name()%></td>
-						<td><a href="itemDetail.jsp?id=<%=di.getItem_id()%>"><%=di.getItem_id()%></a></td>
-						<td><a href="itemDetail.jsp?id=<%=di.getItem_id()%>"><%=di.getItem_name()%></a></td>
+	  					<td class="Clickable" onclick="location.href='itemDetail.jsp?item_id=<%=di.getItem_id()%>'"><%=di.getItem_id()%></td>
+						<td class="Clickable" onclick="location.href='itemDetail.jsp?item_id=<%=di.getItem_id()%>'"><%=di.getItem_name()%></td> 
 						<td><%=di.getDeployment_time()%></td>
 						<td><%=di.getDeployment_location()%></td>
-						<td><%=lat%></td>
-						<td><%=lon%></td>
+						<td><%= (di.isEnabled())?"enabled":"disabled" %></td>
 						<td>
 							<button type="button" 
-								onclick="location.href='deviceDetail.jsp?id=<%=di.getDevice_id()%>'">detail</button>
+								onclick="location.href='deviceDetail.jsp?device_id=<%=di.getDevice_id()%>'">detail</button>
 						</td> 
 					</tr>
 <%

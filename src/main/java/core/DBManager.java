@@ -1,4 +1,4 @@
-package webmodules;
+package core;
 
 import java.sql.*;
 import java.util.*;
@@ -267,6 +267,48 @@ public class DBManager {
 		}
 	}
 	
+	public ArrayList<String> getDBModuleList(int item_id) {
+		ArrayList<String> keylist = new ArrayList<String>();
+		// get sensor and actuator list from specific table
+		try {
+			ResultSet rs = null;
+			String sql = "SELECT md_value "
+						+ " FROM " + tblSpecific
+						+ " WHERE item_id = " + item_id + " and " 
+						+ " (md_key ='" + mdSensor + "' or md_key ='" + mdActuator + "')"
+						+ " ORDER BY md_key ASC;";
+//			System.out.println(sql);
+			
+			Statement stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			while (rs.next()) {
+				keylist.add(rs.getString(1));
+			}
+			
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in checkSpecificInfo()");
+		}
+		
+		return keylist;
+		
+	}
+	
+	public ArrayList<String> getInputModuleList(ArrayList<String> keylist, ArrayList<String> valuelist) {
+		ArrayList<String> list = new ArrayList<String>();
+		
+		for (int i=0; i<keylist.size(); i++) {
+			if (keylist.get(i).equals(mdSensor) || keylist.get(i).equals(mdActuator)) 
+				list.add(valuelist.get(i));
+		}
+		
+		return list;
+	}
+	
+	
 	
 	// about Device List
 	public ArrayList<DeviceInfo> getList_Device() {
@@ -275,7 +317,7 @@ public class DBManager {
 			ResultSet rs = null;
 	
 			String sql = "SELECT d.device_id, d.item_id, ic.model_name, d.system_id, d.device_name, "
-					+ "d.table_name, d.deployment_time, d.deployment_location, d.latitude, d.longitude "
+					+ "d.table_name, d.deployment_time, d.deployment_location, d.latitude, d.longitude, d.enabled "
 					+ "FROM " + tblDevice + " d, " + tblCommon + " ic "
 					+ "WHERE d.item_id = ic.item_id;";
 			
@@ -294,6 +336,7 @@ public class DBManager {
 				di.setDeployment_location(rs.getString(8));
 				di.setLatitude(rs.getString(9));
 				di.setLongitude(rs.getString(10));
+				di.setEnabled(rs.getInt(11));
 //				System.out.println(di.toString());
 				
 				dlist.add(di);
@@ -313,25 +356,33 @@ public class DBManager {
 		try {
 			ResultSet rs = null;
 	
-			String sql = "SELECT device_id, device_name, system_id, table_name, "
-					+ "item_id, deployment_time, deployment_location, latitude, longitude "
-					+ "FROM " + tblDevice + " " 
-					+ "WHERE item_id = " + item_id;
+//			String sql = "SELECT device_id, device_name, system_id, table_name, "
+//					+ "item_id, deployment_time, deployment_location, latitude, longitude, enabled "
+//					+ "FROM " + tblDevice + " " 
+//					+ "WHERE item_id = " + item_id;
+			
+			String sql = "SELECT d.device_id, d.device_name, d.system_id, d.table_name, d.item_id, ic.model_name, "
+					+ "d.deployment_time, d.deployment_location, d.latitude, d.longitude, d.enabled "
+					+ "FROM " + tblDevice + " d, " + tblCommon + " ic "
+					+ "WHERE d.item_id = " + item_id +" and d.item_id = ic.item_id;";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 //			System.out.println("Get Device List : ");
 			while (rs.next()) {
 				DeviceInfo di = new DeviceInfo();
+				
 				di.setDevice_id(rs.getInt(1));
 				di.setDevice_name(rs.getString(2));
 				di.setSystem_id(rs.getString(3));
 				di.setTable_name(rs.getString(4));
 				di.setItem_id(rs.getInt(5));
-				di.setDeployment_time(rs.getString(6));
-				di.setDeployment_location(rs.getString(7));
-				di.setLatitude(rs.getString(8));
-				di.setLongitude(rs.getString(9));
+				di.setItem_name(rs.getString(6));
+				di.setDeployment_time(rs.getString(7));
+				di.setDeployment_location(rs.getString(8));
+				di.setLatitude(rs.getString(9));
+				di.setLongitude(rs.getString(10));
+				di.setEnabled(rs.getInt(11));
 //				System.out.println(di.toString());
 				
 				dlist.add(di);
@@ -350,8 +401,8 @@ public class DBManager {
 	public DeviceInfo getDeviceInfo(int device_id){
 		DeviceInfo di = new DeviceInfo(); 
 		try {
-			String sql = "SELECT d.device_id, d.item_id, ic.model_name, d.system_id, d.device_name, "
-						+ "d.table_name, d.deployment_time, d.deployment_location, d.latitude, d.longitude "
+			String sql = "SELECT d.device_id, d.device_name, d.system_id, d.table_name, d.item_id, ic.model_name, "
+						+ "d.deployment_time, d.deployment_location, d.latitude, d.longitude, d.enabled "
 						+ "FROM " + tblDevice + " d, " + tblCommon + " ic "
 						+ "WHERE d.device_id = " + device_id + " AND d.item_id = ic.item_id;";
 
@@ -360,15 +411,16 @@ public class DBManager {
 
 			while (rs.next()) {
 				di.setDevice_id(rs.getInt(1));
-				di.setItem_id(rs.getInt(2));
-				di.setItem_name(rs.getString(3));
-				di.setSystem_id(rs.getString(4));
-				di.setDevice_name(rs.getString(5));
-				di.setTable_name(rs.getString(6));
+				di.setDevice_name(rs.getString(2));
+				di.setSystem_id(rs.getString(3));
+				di.setTable_name(rs.getString(4));
+				di.setItem_id(rs.getInt(5));
+				di.setItem_name(rs.getString(6));
 				di.setDeployment_time(rs.getString(7));
 				di.setDeployment_location(rs.getString(8));
 				di.setLatitude(rs.getString(9));
 				di.setLongitude(rs.getString(10));
+				di.setEnabled(rs.getInt(11));
 			}
 			
 			rs.close();
@@ -385,8 +437,8 @@ public class DBManager {
 		try {
 			String sql = "INSERT INTO " + tblDevice 
 						+ " (device_name, system_id, table_name, item_id, deployment_time,"
-						+ " deployment_location, latitude, longitude)"
-						+ " VALUES (?,?,?,?,?,?,?,?)";
+						+ " deployment_location, latitude, longitude, enabled)"
+						+ " VALUES (?,?,?,?,?,?,?,?, 1)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -475,15 +527,15 @@ public class DBManager {
 						+ " FROM " + tblDevice 
 						+ " ORDER BY device_id DESC LIMIT 1;";
 //			System.out.println(sql);
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 				device_id = rs.getInt(1);
 			}
 
 			rs.close();
-			pstmt.close();
+			stmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("Error is occured in updateDeviceTableName()");
@@ -495,7 +547,7 @@ public class DBManager {
 	public boolean updateDeviceTableName(int device_id, String table_name) {
 		try {
 			String sql = "UPDATE " + tblDevice 
-						+ " SET table_name=?"
+						+ " SET table_name=?, enabled=1"
 						+ " WHERE device_id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -513,6 +565,51 @@ public class DBManager {
 //		System.out.println("update success");
 		return true;
 	}
+	
+	public boolean updateDeviceEnabled(int device_id, boolean enabled) {
+		try {
+			String sql = "UPDATE " + tblDevice 
+						+ " SET enabled=?"
+						+ " WHERE device_id=?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			int enabledInt = 0;
+			if (enabled) enabledInt = 1;
+			
+			pstmt.setInt(1, enabledInt);
+			pstmt.setInt(2, device_id);
+			
+//			System.out.println(pstmt.toString());
+			
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in updateDeviceTableName()");
+			return false;
+		}
+//		System.out.println("update success");
+		return true;
+	}
+	
+	public int getCount_DeviceMeasurement(String table_Name) {
+		int cnt = 0;
+		try {
+			// get sensor spec from specific_metadata
+			String sql = "SELECT count(*) FROM " + dbnameMeasurement + "." + table_Name + ";";
+
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				cnt = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println("Error is occured in getCount_DeviceMeasurement()");
+		}
+		
+		return cnt;
+	}
 		
 	public boolean createTable_DeviceMeasurement(int item_id, String table_Name) {
 		ArrayList<String> keyList = new ArrayList<String>();
@@ -526,6 +623,8 @@ public class DBManager {
 			PreparedStatement pstmt = conn.prepareStatement(select_sql);
 			ResultSet rs = pstmt.executeQuery();
 
+			System.out.println(pstmt.toString());
+
 			while (rs.next()) {
 				String key = rs.getString("md_value");
 				keyList.add(key);
@@ -538,6 +637,8 @@ public class DBManager {
 			PreparedStatement pstmt2 = conn.prepareStatement(select_sql2);
 			ResultSet rs2 = pstmt2.executeQuery();
 		
+			System.out.println(pstmt2.toString());
+
 			while (rs2.next()) {
 				String key = rs2.getString("md_value");
 				keyList.add(key);
@@ -550,10 +651,14 @@ public class DBManager {
 			Statement stmt = this.conn.createStatement();
 			stmt.execute(createSql);
 
+			System.out.println(createSql);
+			
 			for (int j = 0; j < keyList.size(); j++) {
 				String alterSql = "ALTER TABLE " + dbnameMeasurement + "." + table_Name 
 							+ " ADD " + keyList.get(j) + " varchar(200)";
 				stmt.execute(alterSql);
+				System.out.println(alterSql);
+
 			}
 		}
 

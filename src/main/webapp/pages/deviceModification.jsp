@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.util.*,core.*, structures.*" %>
 <%
-	int device_id = Integer.parseInt(request.getParameter("id"));
+	int device_id = Integer.parseInt(request.getParameter("device_id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	dbm.connect();

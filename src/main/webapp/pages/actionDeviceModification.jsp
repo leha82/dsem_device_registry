@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.sql.*, java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.sql.*, java.util.*, core.*, structures.*" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	int device_id = Integer.parseInt(request.getParameter("device_id"));
@@ -21,6 +21,6 @@
 	dbm.updateDeviceInfo(di);
 	dbm.disconnect();
 	out.println("<script type='text/javascript'>");
-	out.println("	location.href='deviceDetail.jsp?id=" + device_id + "';");
+	out.println("	location.href='deviceDetail.jsp?device_id=" + di.getDevice_id() + "';");
 	out.println("</script>");
 %>

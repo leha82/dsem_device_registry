@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.util.*,core.*, structures.*" %>
 <%
-	int item_id = Integer.parseInt(request.getParameter("id"));
+	int item_id = Integer.parseInt(request.getParameter("item_id"));
 
 	DBManager dbm = new DBManager(application.getRealPath("/"));
 	
@@ -9,7 +9,8 @@
 	
 	ItemCommon ic = dbm.getItemCommon(item_id);
 	ItemSpecific is = dbm.getItemSpecific(item_id);
-	
+	ArrayList<DeviceInfo> dilist = dbm.getList_Device(item_id);
+
 	dbm.disconnect();
 
 //	for(int i=0; i<is.size(); i++) {
@@ -26,8 +27,22 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" 
 		type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href = "../css/main.css">
-	<script type="text/javascript">   
-       	function goBack(){
+	<script type="text/javascript">
+		function modiConfirm() {
+			var conf = 1;
+			if (<%=dilist.size()%> > 0) {
+				if (!confirm('There are more than one device referencing this item. ' 
+						+ 'The devices can be disabled if you modify specific information. '
+						+ 'Do you really want to modify this item?')) {
+					conf = 0;
+				} 
+			}
+			if (conf==1) {
+				formitemmodi.isSize.value = is_index;
+				document.formitemmodi.submit();
+			}
+		}
+       	function goBack() {
        		window.history.back();
        	}
 	</script>
@@ -48,7 +63,7 @@
 		<form name='formitemmodi' action="actionItemModification.jsp" method="POST">
 		<div class="NarrowTable">
 			<div class="SubMenuBar">
-				<button class="SubMenuButton" type="submit" id="changeBtn">confirm</button>
+				<button class="SubMenuButton" type="button" onclick="modiConfirm();">confirm</button>
 				<button class="SubMenuButton" type="button" onclick="goBack();">back</button>
 			</div>
 			Common Information
@@ -61,32 +76,32 @@
 				</thead>
 				<tr>
 					<th>Item id</th>
-					<td><input type="text" class="inputText" id="id" name="id" 
+					<td><input type="text" class="inputText" name="item_id" 
 						value="<%=ic.getId()%>" readonly /></td>
 				</tr>
 				<tr>
 					<th>Registration time</th>
-					<td><input type="text" class="inputText" id="id" name="id" 
+					<td><input type="text" class="inputText" name="registration_time" 
 						value="<%=ic.getRegistration_time()%>" readonly /></td>
 				</tr>
 				<tr>
 					<th>Model name</th>
-					<td><input type="text" class="inputText" id="model_name" name="model_name"
+					<td><input type="text" class="inputText" name="model_name"
 							value="<%=ic.getModel_name()%>"></td>
 				</tr>
 				<tr>
 					<th>Device type</th>
-					<td><input type="text" class="inputText" id="device_type" name="device_type" 
+					<td><input type="text" class="inputText" name="device_type" 
 							value="<%=ic.getDevice_type()%>"></td>
 				</tr>
 				<tr>
 					<th>Manufacturer</th>
-					<td><input type="text" class="inputText" id="manufacturer" name="manufacturer" 
+					<td><input type="text" class="inputText" name="manufacturer" 
 							value="<%=ic.getManufacturer()%>"></td>
 				</tr>
 				<tr>
 					<th>Category</th>
-					<td><input type="text" class="inputText" id="category" name="category" 
+					<td><input type="text" class="inputText" name="category" 
 							value="<%=ic.getCategory()%>"></td>
 				</tr>
 			</table>
@@ -94,34 +109,37 @@
 			<h2 style = "text-align: left;">Specific Information</h2>
 			<table>
 				<thead>
-					<th>No</th>
-					<th>Group</th>
-					<th style="width:50%;">Key</th>
-					<th style="width:50%;">Value</th>
-					<th>
-						<input type="button" id="append_row" value="add">
-					</th>
+					<tr>
+						<th>No</th>
+						<th>Group</th>
+						<th style="width:50%;">Key</th>
+						<th style="width:50%;">Value</th>
+						<th>
+							<input type="button" id="append_row" value="add">
+						</th>
+					</tr>
 				</thead>
+				<tbody>
 			<%
 			for(int i = 0; i < is.size(); i++){
 			%>
-				<tr>
-					<td><input type='text' class="inputText" name='Dseq<%=i%>' 
-						value='<%=i+1%>'></td>
-					<td><input type='text' class="inputText" name='Dgroup<%=i%>' 
-						value='<%=is.getGroup(i)%>'></td>
-					<td><input type='text' class="inputText" name='Dkey<%=i%>'
-						value='<%=is.getKey(i)%>'></td>
-				    <td><input type='text' class="inputText" name='Dvalue<%=i%>' 
-				    	value='<%= is.getValue(i)%>'></td>
-					<td><input type='button' value='delete' onclick='deleteRow(this)'/></td>
-				</tr>
-				
+					<tr>
+						<td><input type='text' class="inputText" name='Dseq<%=i%>' 
+							value='<%=i+1%>'></td>
+						<td><input type='text' class="inputText" name='Dgroup<%=i%>' 
+							value='<%=is.getGroup(i)%>'></td>
+						<td><input type='text' class="inputText" name='Dkey<%=i%>'
+							value='<%=is.getKey(i)%>'></td>
+					    <td><input type='text' class="inputText" name='Dvalue<%=i%>' 
+					    	value='<%= is.getValue(i)%>'></td>
+						<td><input type='button' value='delete' onclick='deleteRow(this)'/></td>
+					</tr>
 			<%
 			}
 			%>
-				<tbody id="AddOption">
-			    </tbody>
+				</tbody>				
+				<tfoot id="AddOption">
+			    </tfoot>
 			</table>
 		</div>
 		
@@ -152,9 +170,9 @@
 				 $(obj).parent().parent().remove();
 			}
 
-			$("#changeBtn").click(function() {
-				formitemmodi.isSize.value = is_index;
-			});
+//			$("#changeBtn").click(function() {
+//				formitemmodi.isSize.value = is_index;
+//			});
 		</script>
 	
 	</form>

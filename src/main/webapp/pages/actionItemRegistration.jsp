@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@page import="java.sql.*, java.util.*, webmodules.*, structures.*" %>
+<%@page import="java.sql.*, java.util.*,core.*, structures.*" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	DBManager dbm = new DBManager(application.getRealPath("/"));
